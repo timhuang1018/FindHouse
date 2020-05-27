@@ -1,9 +1,13 @@
 package com.chingkai56.findhouse;
 
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.FragmentActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
+import android.view.View;
+import android.widget.TextView;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -17,19 +21,37 @@ import static com.chingkai56.findhouse.PriceRangeAdapterKt.priceRangeData;
 public class HouseMapsActivity extends FragmentActivity implements OnMapReadyCallback {
 
     private GoogleMap mMap;
+    //adapter to control list of price range item for 租金 tab
     private PriceRangeAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_house_maps);
-        // Obtain the SupportMapFragment and get notified when the map is ready to be used.
+//         Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
+        RecyclerView verticalList = findViewById(R.id.recycler_vertical_list_conditions);
+        //init price range adapter ,bind with recyclerview and add data in it
         adapter = new PriceRangeAdapter();
+        verticalList.setAdapter(adapter);
+        verticalList.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
         adapter.addData(priceRangeData());
+
+
+        ConstraintLayout container = findViewById(R.id.conditions_container);
+        //set click listener to tab 租金
+        TextView view = findViewById(R.id.textview_rent_price);
+
+        view.setOnClickListener(v -> {
+            if (container.getVisibility()==View.GONE){
+                container.setVisibility(View.VISIBLE);
+            }else {
+                container.setVisibility(View.GONE);
+            }
+        });
     }
 
 

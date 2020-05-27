@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <TextView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/text_price_range"
+    android:id="@+id/textview_price_range"
     tools:text="測試"
     android:background="@drawable/header_item_divider"
     android:gravity="center"
