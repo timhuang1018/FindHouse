@@ -32,7 +32,7 @@ public class HouseMapsActivity extends FragmentActivity implements OnMapReadyCal
 //         Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
-        mapFragment.getMapAsync(this);
+//        mapFragment.getMapAsync(this);
 
         RecyclerView verticalList = findViewById(R.id.recycler_vertical_list_conditions);
         //init price range adapter ,bind with recyclerview and add data in it
