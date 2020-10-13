@@ -1,0 +1,57 @@
+CREATE TABLE house(
+        houseId INTEGER AS Int NOT NULL PRIMARY KEY,
+        userId INTEGER AS Int NOT NULL,
+        type INTEGER AS Int NOT NULL,
+        kind INTEGER AS Int NOT NULL,
+        postId INTEGER AS Int NOT NULL,
+        regionId INTEGER AS Int ,
+        regionName TEXT,
+        sectionName TEXT,
+        sectionId INTEGER AS Int,
+        streetId  INTEGER AS Int,
+        streetName TEXT,
+        alleyName  TEXT,
+        caseName  TEXT,
+        caseId  TEXT,
+        layout  TEXT,
+        area REAL NOT NULL,
+        room INTEGER AS Int NOT NULL,
+        floor INTEGER AS Int NOT NULL,
+        allFloor INTEGER AS Int NOT NULL,
+        updateTime TEXT,
+        condition TEXT NOT NULL,
+        cover TEXT NOT NULL,
+        refreshTime TEXT,
+        closed INTEGER AS Int NOT NULL,
+        kindName TEXT,
+        iconClass TEXT,
+        fullAddress TEXT NOT NULL,
+        shape INTEGER AS Int NOT NULL,
+        createDate INTEGER NOT NULL,
+        isSealed INTEGER AS Boolean NOT NULL DEFAULT 0
+);
+
+insertHouse:
+INSERT INTO house(
+        houseId,userId,type,kind,
+        postId,regionId,regionName,
+        sectionName,sectionId,streetId,
+        streetName,alleyName,caseName,
+        caseId,layout,area,room,floor,allFloor,updateTime,
+        condition,cover,refreshTime,closed,
+        kindName,iconClass,fullAddress,shape,
+        createDate
+) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);
+
+updateHouse:
+UPDATE house SET userId =:userId, type=:type, kind=:kind,postId=:postId,regionId=:regionId,regionName=:regionName,
+sectionName=:sectionName,sectionId=:sectionId,streetId=:streetId,streetName=:streetName,alleyName=:alleyName,
+caseName=:caseName,caseId=:caseId,layout=:layout,area=:area,room=:room,floor=:floor,allFloor=:allFloor,
+updateTime=:updateTime,condition=:condition,cover=:cover,refreshTime=:refreshTime,closed=:closed,
+kindName=:kindName,iconClass=:iconClass,fullAddress=:fullAddress,shape=:shape WHERE houseId=:houseId;
+
+findHouse:
+SELECT * FROM house WHERE houseId=:houseId;
+
+updateSealed:
+UPDATE house SET isSealed = :isSealed WHERE houseId=:houseId;
