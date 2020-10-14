@@ -22,8 +22,13 @@ class SettingApplication:Application() {
         database = Database.invoke(driver)
     }
 
+    fun db(): Database {
+        return database
+    }
+
     companion object{
         private lateinit var instance:SettingApplication
-        fun getDb() = instance.database
+        @JvmStatic
+        fun getDb() = instance.db()
     }
 }

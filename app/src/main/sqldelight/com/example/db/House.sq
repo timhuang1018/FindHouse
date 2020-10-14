@@ -28,7 +28,9 @@ CREATE TABLE house(
         fullAddress TEXT NOT NULL,
         shape INTEGER AS Int NOT NULL,
         createDate INTEGER NOT NULL,
-        isSealed INTEGER AS Boolean NOT NULL DEFAULT 0
+        isSealed INTEGER AS Boolean NOT NULL DEFAULT 0,
+        title TEXT NOT NULL,
+        price TEXT NOT NULL
 );
 
 insertHouse:
@@ -40,18 +42,22 @@ INSERT INTO house(
         caseId,layout,area,room,floor,allFloor,updateTime,
         condition,cover,refreshTime,closed,
         kindName,iconClass,fullAddress,shape,
-        createDate
-) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);
+        createDate,title,price
+) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);
 
 updateHouse:
 UPDATE house SET userId =:userId, type=:type, kind=:kind,postId=:postId,regionId=:regionId,regionName=:regionName,
 sectionName=:sectionName,sectionId=:sectionId,streetId=:streetId,streetName=:streetName,alleyName=:alleyName,
 caseName=:caseName,caseId=:caseId,layout=:layout,area=:area,room=:room,floor=:floor,allFloor=:allFloor,
 updateTime=:updateTime,condition=:condition,cover=:cover,refreshTime=:refreshTime,closed=:closed,
-kindName=:kindName,iconClass=:iconClass,fullAddress=:fullAddress,shape=:shape WHERE houseId=:houseId;
+kindName=:kindName,iconClass=:iconClass,fullAddress=:fullAddress,shape=:shape,title=:title,price=:price
+WHERE houseId=:houseId;
 
 findHouse:
 SELECT * FROM house WHERE houseId=:houseId;
 
 updateSealed:
 UPDATE house SET isSealed = :isSealed WHERE houseId=:houseId;
+
+getHouses:
+SELECT * FROM house WHERE isSealed IS NOT 1;

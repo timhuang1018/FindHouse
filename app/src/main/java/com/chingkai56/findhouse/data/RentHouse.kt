@@ -50,7 +50,10 @@ data class RentHouse(
         val iconClass:String?,
         @SerialName("fulladdress")
         val fullAddress:String,
-        val shape:Int
+        val shape:Int,
+        @SerialName("address_img_title")
+        val title:String,
+        val price:String
 )
 
 @Serializable

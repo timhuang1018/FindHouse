@@ -16,16 +16,27 @@
         app:layout_constraintBottom_toBottomOf="parent"
         />
 
+    <ImageView
+        android:id="@+id/iv_not_good"
+        android:layout_width="36dp"
+        android:layout_height="wrap_content"
+        app:srcCompat="@drawable/ic_not_good"
+        android:background="@drawable/sample_background"
+        app:layout_constraintBottom_toBottomOf="@id/iv_cover"
+        app:layout_constraintStart_toStartOf="@id/iv_cover"
+        />
+
     <TextView
         android:id="@+id/tv_title"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:textSize="16sp"
-        tools:text="標題幾個字"
-        android:textStyle="bold"
+        android:lineSpacingMultiplier="0.75"
+        tools:text="標題幾個字標題幾個字標題幾個字標題幾個字標題幾個字"
         app:layout_constraintTop_toTopOf="@id/iv_cover"
         app:layout_constraintStart_toEndOf="@id/iv_cover"
         app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginStart="4dp"
         />
 
     <TextView
@@ -35,8 +46,10 @@
         app:layout_constraintStart_toEndOf="@id/iv_cover"
         app:layout_constraintEnd_toEndOf="parent"
         android:maxLines="1"
+        android:textSize="13sp"
         android:ellipsize="end"
         app:layout_constraintBottom_toTopOf="@id/tv_subtitle"
+        android:layout_marginStart="4dp"
         />
 
     <TextView
@@ -45,6 +58,8 @@
         android:layout_height="wrap_content"
         app:layout_constraintStart_toEndOf="@id/iv_cover"
         app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginStart="4dp"
+        android:textSize="13sp"
         />
 
     <TextView
@@ -53,6 +68,7 @@
         android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="@id/tv_subtitle"
+        android:textSize="13sp"
         />
 
 

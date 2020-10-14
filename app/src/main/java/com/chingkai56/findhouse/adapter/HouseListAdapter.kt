@@ -8,12 +8,13 @@ import androidx.recyclerview.widget.RecyclerView
 import com.chingkai56.findhouse.R
 import com.chingkai56.findhouse.data.domain.HouseUI
 import com.chingkai56.findhouse.data.domain.ListItem
+import com.chingkai56.findhouse.ui.OnHouseAction
 
 /**
  * Created by timhuang on 2020/10/13.
  **/
 
-class HouseListAdapter:ListAdapter<ListItem,RecyclerView.ViewHolder>(ListDiff) {
+class HouseListAdapter(private val listener:OnHouseAction):ListAdapter<ListItem,RecyclerView.ViewHolder>(ListDiff) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return ListItemViewHolder(
                 LayoutInflater.from(parent.context).inflate(R.layout.item_house,parent,false)
@@ -23,7 +24,7 @@ class HouseListAdapter:ListAdapter<ListItem,RecyclerView.ViewHolder>(ListDiff) {
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         val item = getItem(position)
         if (item is HouseUI && holder is ListItemViewHolder){
-            holder.bind(item)
+            holder.bind(item,listener)
         }
     }
 }

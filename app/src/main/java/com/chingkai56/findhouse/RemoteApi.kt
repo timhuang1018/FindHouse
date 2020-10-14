@@ -1,6 +1,7 @@
 package com.chingkai56.findhouse
 
 import android.util.Log
+import com.chingkai56.findhouse.config.HouseException
 import com.chingkai56.findhouse.data.RentHouse
 import com.chingkai56.findhouse.data.SearchJson
 import io.ktor.client.*
@@ -10,8 +11,10 @@ import io.ktor.client.features.json.*
 import io.ktor.client.features.json.serializer.*
 import io.ktor.client.features.logging.*
 import io.ktor.client.request.*
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
 import org.json.JSONObject
@@ -68,24 +71,20 @@ suspend fun getHouses(token:String?=null): List<RentHouse> {
     }
 }
 
-fun test(){
-    GlobalScope.launch {
+suspend fun fetchData(firstRow:Int=0) = withContext(Dispatchers.IO){
+    val doc2 = Jsoup.connect(ROOT_URL).run {
+        this.header("user-agent","Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/81.0.4044.129 Safari/537.36")
+        execute()
+    }
+    val elements = doc2.parse().getElementsByTag("meta")
+    elements.forEach {
 
-        try {
-
-            val doc2 = Jsoup.connect(ROOT_URL).run {
-                this.header("user-agent","Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/81.0.4044.129 Safari/537.36")
-                execute()
-            }
-            val elements = doc2.parse().getElementsByTag("meta")
-            elements.forEach {
-
-                val has = it.attr("name")=="csrf-token"
-                Log.e("csrf","element:$it,has csrf token:$has")
-                if(has){
-                    val result = Jsoup.connect("$ROOT_URL/home/search/rsList")
-                            .ignoreContentType(true)
-                            .run {
+        val has = it.attr("name")=="csrf-token"
+        Log.e("csrf","element:$it,has csrf token:$has")
+        if(has){
+            val result = Jsoup.connect("$ROOT_URL/home/search/rsList")
+                    .ignoreContentType(true)
+                    .run {
                         this.cookies(doc2.cookies())
                         header("X-CSRF-TOKEN",it.attr("content"))
                         this.data("is_new_list","1")
@@ -96,26 +95,21 @@ fun test(){
                         data("regionid","1")
                         data("area","13,40")
                         data("patternMore","1,2")
-                        data("rentprice","14000,25000")
+                        data("rentprice","14000,26000")
                         data("option","cold")
                         data("hasimg","1")
                         data("not_cover", "1")
-                        data("firstRow", "0")
+                        data("firstRow", firstRow.toString())
 
                         execute()
                     }
-                    val serial = Json{
-                        isLenient = true
-                        ignoreUnknownKeys = true
-                    }.decodeFromString<SearchJson>(result.body())
-                    Log.e("serial","serial size:${serial.data.data.size}")
-                }
-            }
-
-        }catch (e:Exception){
-            Log.e("error","$e")
-            Log.e("error","${e.message}")
+            val serial = Json{
+                isLenient = true
+                ignoreUnknownKeys = true
+            }.decodeFromString<SearchJson>(result.body())
+            Log.e("serial","serial size:${serial.data.data.size}")
+            return@withContext serial
         }
-
     }
+    throw HouseException("no data")
 }
