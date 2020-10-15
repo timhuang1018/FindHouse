@@ -26,12 +26,20 @@ class HouseListActivity : AppCompatActivity(),OnHouseAction {
         viewModel.getHouses().observe(this, Observer {
             adapter.submitList(it)
         })
+
+        binding.refreshLayout.setOnRefreshListener {
+            viewModel.refresh()
+        }
+
+        viewModel.isRefreshing.observe(this,{
+            binding.refreshLayout.isRefreshing = it
+        })
     }
 
     override fun seeHouseProfile(intent: Intent) {
         val activities = packageManager?.queryIntentActivities(intent,0) ?: listOf()
         if (activities.isNotEmpty()){
-                startActivity(intent)
+            startActivity(intent)
         }else{
             Timber.e("no browser")
 //            toast("尚未安裝line")

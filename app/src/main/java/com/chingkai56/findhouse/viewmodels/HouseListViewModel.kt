@@ -4,9 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.chingkai56.findhouse.config.SettingApplication
 import com.chingkai56.findhouse.data.domain.HouseUI
-import com.chingkai56.findhouse.data.domain.ListItem
 import com.chingkai56.findhouse.data.repository.HouseRepository
 import kotlinx.coroutines.launch
 
@@ -17,16 +15,11 @@ import kotlinx.coroutines.launch
 class HouseListViewModel:ViewModel() {
 
     private val repository  = HouseRepository()
+    val isRefreshing = MutableLiveData<Boolean>()
 
-    private val _data = MutableLiveData<List<ListItem>>()
-    val data :LiveData<List<ListItem>>
-    get() = _data
-
-    init {
-        viewModelScope.launch {
-            repository.fetch()
-        }
-    }
+//    init {
+//        refresh()
+//    }
 
 
     fun getHouses(): LiveData<List<HouseUI>> {
@@ -35,5 +28,12 @@ class HouseListViewModel:ViewModel() {
 
     fun sealHouse(id: Int) {
         repository.sealHouse(id)
+    }
+
+    fun refresh() {
+        viewModelScope.launch {
+            repository.fetch()
+            isRefreshing.value = false
+        }
     }
 }

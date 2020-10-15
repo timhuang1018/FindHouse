@@ -5,11 +5,9 @@ import androidx.lifecycle.asLiveData
 import com.chingkai56.findhouse.Database
 import com.chingkai56.findhouse.data.RentHouse
 import com.chingkai56.findhouse.data.domain.HouseUI
-import com.example.db.House
 import com.squareup.sqldelight.Query
 import com.squareup.sqldelight.runtime.coroutines.asFlow
 import com.squareup.sqldelight.runtime.coroutines.mapToList
-import com.squareup.sqldelight.runtime.coroutines.mapToOne
 import org.threeten.bp.Instant
 
 /**
@@ -19,20 +17,27 @@ import org.threeten.bp.Instant
 class LocalDataSource(db:Database) {
     private val query = db.houseQueries
 
-    fun insertItems(list:List<RentHouse>){
+    /**
+     * @return true means has at least one insert
+     */
+    fun insertItems(list:List<RentHouse>):Boolean{
+        var hasNew = false
         query.transaction {
             list.forEach {
                 if (query.findHouse(it.houseId).executeAsOneOrNull()!=null){
                     updateHouse(it)
                 }else{
                     insertHouse(it)
+                    hasNew = true
                 }
             }
         }
+        return hasNew
     }
 
     private fun insertHouse(house: RentHouse) {
         house.apply {
+            if (shape!=2 && floor>2) return
             query.insertHouse(
                     houseId = houseId, userId = userId,
                     type = type,kind = kind,postId = postId,
@@ -74,7 +79,7 @@ class LocalDataSource(db:Database) {
     }
 
     fun dbHouseMapper(id:Int): Query<HouseUI> {
-        return query.findHouse(houseId = id,mapper = { houseId, userId, type, kind, postId, regionId, regionName, sectionName, sectionId, streetId, streetName, alleyName, caseName, caseId, layout, area, room, floor, allFloor, updateTime, condition, cover, refreshTime, closed, kindName, iconClass, fullAddress, shape, createDate, isSealed,title,price ->
+        return query.findHouse(houseId = id,mapper = { houseId, userId, type, kind, postId, regionId, regionName, sectionName, sectionId, streetId, streetName, alleyName, caseName, caseId, layout, area, room, floor, allFloor, updateTime, condition, cover, refreshTime, closed, kindName, iconClass, fullAddress, shape, createDate, isSealed,title,price->
             HouseUI(
                  id = houseId, userId = userId,
                     type = type,kind = kind,postId = postId,

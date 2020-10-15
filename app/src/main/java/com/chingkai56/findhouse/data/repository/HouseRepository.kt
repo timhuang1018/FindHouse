@@ -14,18 +14,29 @@ import timber.log.Timber
 class HouseRepository {
     private val localDataSource = LocalDataSource(SettingApplication.getDb())
 
-    suspend fun fetch(){
+    /**
+     * if has new data, @return true
+     */
+    suspend fun fetch(): Boolean {
+        Timber.d("fetch called")
+        var shouldNotify = false
         try {
             var firstRow = 0
             while (firstRow%30==0){
                 val result = fetchData(firstRow).data.data
-                localDataSource.insertItems(result)
+                val hasNew = localDataSource.insertItems(result)
+                if (hasNew){
+                    shouldNotify = true
+                }
+//                else{
+//                    break
+//                }
                 firstRow += result.size
             }
-
         }catch (e:Exception){
             Timber.e(e)
         }
+        return shouldNotify
     }
 
     fun getHouses(): LiveData<List<HouseUI>>{

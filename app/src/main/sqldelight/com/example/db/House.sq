@@ -60,4 +60,4 @@ updateSealed:
 UPDATE house SET isSealed = :isSealed WHERE houseId=:houseId;
 
 getHouses:
-SELECT * FROM house WHERE isSealed IS NOT 1;
+SELECT * FROM house WHERE isSealed IS NOT 1 ORDER BY createDate DESC;
