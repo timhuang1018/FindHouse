@@ -1,7 +1,7 @@
 package com.chingkai56.findhouse.data.repository
 
 import androidx.lifecycle.LiveData
-import com.chingkai56.findhouse.config.SettingApplication
+import com.chingkai56.findhouse.config.BaseApplication
 import com.chingkai56.findhouse.data.domain.HouseUI
 import com.chingkai56.findhouse.data.source.LocalDataSource
 import com.chingkai56.findhouse.fetchData
@@ -12,7 +12,7 @@ import timber.log.Timber
  **/
 
 class HouseRepository {
-    private val localDataSource = LocalDataSource(SettingApplication.getDb())
+    private val localDataSource = LocalDataSource(BaseApplication.getDb())
 
     /**
      * if has new data, @return true
@@ -43,7 +43,11 @@ class HouseRepository {
         return localDataSource.getHouses()
     }
 
-    fun sealHouse(id: Int) {
-        localDataSource.sealHouse(id)
+    fun getSealedHouses(): LiveData<List<HouseUI>> {
+        return localDataSource.getSealedHouse()
+    }
+
+    fun sealOrNot(id: Int,toSeal:Boolean) {
+        localDataSource.sealOrNot(id,toSeal)
     }
 }

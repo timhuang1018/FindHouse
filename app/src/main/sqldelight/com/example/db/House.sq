@@ -29,6 +29,7 @@ CREATE TABLE house(
         shape INTEGER AS Int NOT NULL,
         createDate INTEGER NOT NULL,
         isSealed INTEGER AS Boolean NOT NULL DEFAULT 0,
+        sealDate INTEGER,
         title TEXT NOT NULL,
         price TEXT NOT NULL
 );
@@ -57,7 +58,10 @@ findHouse:
 SELECT * FROM house WHERE houseId=:houseId;
 
 updateSealed:
-UPDATE house SET isSealed = :isSealed WHERE houseId=:houseId;
+UPDATE house SET isSealed = :isSealed,sealDate = :sealDate WHERE houseId=:houseId;
 
 getHouses:
 SELECT * FROM house WHERE isSealed IS NOT 1 ORDER BY createDate DESC;
+
+getSealed:
+SELECT * FROM house WHERE isSealed IS 1 ORDER BY sealDate IS NULL DESC;

@@ -2,15 +2,16 @@ package com.chingkai56.findhouse.ui
 
 import android.content.Intent
 import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
+import android.view.Menu
+import android.view.MenuItem
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.chingkai56.findhouse.R
 import com.chingkai56.findhouse.adapter.HouseListAdapter
 import com.chingkai56.findhouse.databinding.ActivityHouseListBinding
 import com.chingkai56.findhouse.viewmodels.HouseListViewModel
-import timber.log.Timber
 
-class HouseListActivity : AppCompatActivity(),OnHouseAction {
+class HouseListActivity : BaseActivity() {
 
     private lateinit var binding :ActivityHouseListBinding
     private val adapter = HouseListAdapter(this)
@@ -20,6 +21,7 @@ class HouseListActivity : AppCompatActivity(),OnHouseAction {
         super.onCreate(savedInstanceState)
         binding = ActivityHouseListBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        supportActionBar?.setDisplayShowTitleEnabled(false)
         binding.verticalList.layoutManager = LinearLayoutManager(this)
         binding.verticalList.adapter = adapter
 
@@ -36,22 +38,30 @@ class HouseListActivity : AppCompatActivity(),OnHouseAction {
         })
     }
 
-    override fun seeHouseProfile(intent: Intent) {
-        val activities = packageManager?.queryIntentActivities(intent,0) ?: listOf()
-        if (activities.isNotEmpty()){
-            startActivity(intent)
-        }else{
-            Timber.e("no browser")
-//            toast("尚未安裝line")
-        }
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.basic_menu,menu)
+        return true
     }
 
-    override fun sealHouse(id: Int) {
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if (item.itemId==R.id.setting){
+            visitSetting()
+            return true
+        }
+        return super.onOptionsItemSelected(item)
+    }
+
+    private fun visitSetting() {
+        val intent = Intent(this,SettingActivity::class.java)
+        startActivity(intent)
+    }
+
+    override fun sealOrNot(id: Int) {
         viewModel.sealHouse(id)
     }
 }
 
 interface OnHouseAction{
     fun seeHouseProfile(intent:Intent)
-    fun sealHouse(id: Int)
+    fun sealOrNot(id: Int)
 }

@@ -17,9 +17,9 @@ class HouseListViewModel:ViewModel() {
     private val repository  = HouseRepository()
     val isRefreshing = MutableLiveData<Boolean>()
 
-//    init {
-//        refresh()
-//    }
+    init {
+        refresh()
+    }
 
 
     fun getHouses(): LiveData<List<HouseUI>> {
@@ -27,7 +27,7 @@ class HouseListViewModel:ViewModel() {
     }
 
     fun sealHouse(id: Int) {
-        repository.sealHouse(id)
+        repository.sealOrNot(id,toSeal = true)
     }
 
     fun refresh() {

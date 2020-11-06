@@ -8,7 +8,6 @@ import android.os.Build
 import androidx.work.*
 import com.chingkai56.findhouse.Database
 import com.chingkai56.findhouse.R
-import com.chingkai56.findhouse.work.FetchHousesWork
 import com.squareup.sqldelight.android.AndroidSqliteDriver
 import com.squareup.sqldelight.db.SqlDriver
 
@@ -16,7 +15,7 @@ import com.squareup.sqldelight.db.SqlDriver
  * Created by timhuang on 2020/10/13.
  **/
 
-class SettingApplication:Application() {
+class BaseApplication:Application() {
 
     private lateinit var driver:SqlDriver
     private lateinit var database: Database
@@ -33,14 +32,14 @@ class SettingApplication:Application() {
                 .setRequiresBatteryNotLow(true)
                 .build()
 
-        val request : PeriodicWorkRequest = PeriodicWorkRequestBuilder<FetchHousesWork>(
-                30,java.util.concurrent.TimeUnit.MINUTES,
-                30,java.util.concurrent.TimeUnit.MINUTES)
-                .setConstraints(constraints)
-                .build()
-        WorkManager
-                .getInstance(this)
-                .enqueueUniquePeriodicWork(CONTINUE_FETCH,ExistingPeriodicWorkPolicy.REPLACE,request)
+//        val request : PeriodicWorkRequest = PeriodicWorkRequestBuilder<FetchHousesWork>(
+//                30,java.util.concurrent.TimeUnit.MINUTES,
+//                30,java.util.concurrent.TimeUnit.MINUTES)
+//                .setConstraints(constraints)
+//                .build()
+//        WorkManager
+//                .getInstance(this)
+//                .enqueueUniquePeriodicWork(CONTINUE_FETCH,ExistingPeriodicWorkPolicy.REPLACE,request)
     }
 
     fun db(): Database {
@@ -67,7 +66,7 @@ class SettingApplication:Application() {
     }
 
     companion object{
-        private lateinit var instance:SettingApplication
+        private lateinit var instance:BaseApplication
         @JvmStatic
         fun getDb() = instance.db()
         const val CONTINUE_FETCH = "continue fetch"

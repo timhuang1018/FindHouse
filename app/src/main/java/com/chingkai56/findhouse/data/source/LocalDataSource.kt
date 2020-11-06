@@ -79,7 +79,7 @@ class LocalDataSource(db:Database) {
     }
 
     fun dbHouseMapper(id:Int): Query<HouseUI> {
-        return query.findHouse(houseId = id,mapper = { houseId, userId, type, kind, postId, regionId, regionName, sectionName, sectionId, streetId, streetName, alleyName, caseName, caseId, layout, area, room, floor, allFloor, updateTime, condition, cover, refreshTime, closed, kindName, iconClass, fullAddress, shape, createDate, isSealed,title,price->
+        return query.findHouse(houseId = id,mapper = { houseId, userId, type, kind, postId, regionId, regionName, sectionName, sectionId, streetId, streetName, alleyName, caseName, caseId, layout, area, room, floor, allFloor, updateTime, condition, cover, refreshTime, closed, kindName, iconClass, fullAddress, shape, createDate, isSealed,sealDate,title,price->
             HouseUI(
                  id = houseId, userId = userId,
                     type = type,kind = kind,postId = postId,
@@ -92,13 +92,13 @@ class LocalDataSource(db:Database) {
                     updateTime = updateTime,condition = condition,cover = cover,
                     refreshTime = refreshTime,closed = closed,kindName = kindName,
                     iconClass = iconClass,fullAddress = fullAddress,shape = shape,
-                    title = title,price = price
+                    title = title,price = price,isSealed = isSealed
             )
         })
     }
 
     fun getHouses(): LiveData<List<HouseUI>> {
-        return query.getHouses { houseId, userId, type, kind, postId, regionId, regionName, sectionName, sectionId, streetId, streetName, alleyName, caseName, caseId, layout, area, room, floor, allFloor, updateTime, condition, cover, refreshTime, closed, kindName, iconClass, fullAddress, shape, createDate, isSealed, title, price ->
+        return query.getHouses { houseId, userId, type, kind, postId, regionId, regionName, sectionName, sectionId, streetId, streetName, alleyName, caseName, caseId, layout, area, room, floor, allFloor, updateTime, condition, cover, refreshTime, closed, kindName, iconClass, fullAddress, shape, createDate, isSealed,sealDate, title, price ->
             HouseUI(
                     id = houseId, userId = userId,
                     type = type,kind = kind,postId = postId,
@@ -111,13 +111,36 @@ class LocalDataSource(db:Database) {
                     updateTime = updateTime,condition = condition,cover = cover,
                     refreshTime = refreshTime,closed = closed,kindName = kindName,
                     iconClass = iconClass,fullAddress = fullAddress,shape = shape,
-                    title = title,price = price
+                    title = title,price = price,isSealed = isSealed
             )
         }.asFlow().mapToList().asLiveData()
     }
 
-    fun sealHouse(id: Int) {
-        query.updateSealed(true,id)
+    fun getSealedHouse():LiveData<List<HouseUI>>{
+        return query.getSealed { houseId, userId, type, kind, postId, regionId, regionName, sectionName, sectionId, streetId, streetName, alleyName, caseName, caseId, layout, area, room, floor, allFloor, updateTime, condition, cover, refreshTime, closed, kindName, iconClass, fullAddress, shape, createDate, isSealed, sealDate, title, price ->
+            HouseUI(
+                    id = houseId, userId = userId,
+                    type = type,kind = kind,postId = postId,
+                    regionId = regionId,regionName = regionName,
+                    sectionId = sectionId,sectionName = sectionName,
+                    streetId = streetId,streetName = streetName,
+                    alleyName = alleyName,caseId = caseId,
+                    caseName = caseName,layout = layout,area = area,
+                    room = room,floor = floor,allFloor = allFloor,
+                    updateTime = updateTime,condition = condition,cover = cover,
+                    refreshTime = refreshTime,closed = closed,kindName = kindName,
+                    iconClass = iconClass,fullAddress = fullAddress,shape = shape,
+                    title = title,price = price,isSealed = isSealed
+            )
+        }.asFlow().mapToList().asLiveData()
+    }
+
+    fun sealOrNot(id: Int,toSeal:Boolean) {
+        query.updateSealed(
+                houseId = id,
+                isSealed = toSeal,
+                sealDate = if (toSeal) Instant.now().epochSecond else null
+        )
     }
 
 }

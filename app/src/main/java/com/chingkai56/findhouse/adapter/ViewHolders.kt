@@ -29,7 +29,7 @@ class ListItemViewHolder(itemView: View):RecyclerView.ViewHolder(itemView){
             listener.seeHouseProfile(intent)
         }
         itemView.iv_not_good.setOnClickListener {
-            listener.sealHouse(item.id)
+            listener.sealOrNot(item.id)
         }
     }
 
