@@ -1,4 +1,7 @@
 <resources>
     <string name="app_name">FindHouse</string>
     <string name="title_activity_house_maps">Map</string>
+    <string name="default_notification_channel_id">default channel</string>
+    <string name="default_channel_description">接收一般訊息、通知</string>
+    <string name="default_channel_name">一般通知</string>
 </resources>
