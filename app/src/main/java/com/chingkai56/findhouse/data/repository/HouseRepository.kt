@@ -2,9 +2,11 @@ package com.chingkai56.findhouse.data.repository
 
 import androidx.lifecycle.LiveData
 import com.chingkai56.findhouse.config.BaseApplication
+import com.chingkai56.findhouse.config.ConfigProvider
 import com.chingkai56.findhouse.data.domain.HouseUI
 import com.chingkai56.findhouse.data.source.LocalDataSource
 import com.chingkai56.findhouse.fetchData
+import com.chingkai56.findhouse.recycler.HouseConfig
 import timber.log.Timber
 
 /**
@@ -49,5 +51,9 @@ class HouseRepository {
 
     fun sealOrNot(id: Int,toSeal:Boolean) {
         localDataSource.sealOrNot(id,toSeal)
+    }
+
+    fun getAllConfigs(): List<HouseConfig> {
+        return ConfigProvider.allconfigs()
     }
 }

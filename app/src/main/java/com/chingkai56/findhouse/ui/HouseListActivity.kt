@@ -7,7 +7,7 @@ import android.view.MenuItem
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.chingkai56.findhouse.R
-import com.chingkai56.findhouse.adapter.HouseListAdapter
+import com.chingkai56.findhouse.recycler.HouseListAdapter
 import com.chingkai56.findhouse.databinding.ActivityHouseListBinding
 import com.chingkai56.findhouse.viewmodels.HouseListViewModel
 

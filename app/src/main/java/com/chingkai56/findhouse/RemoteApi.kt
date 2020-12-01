@@ -80,7 +80,7 @@ suspend fun fetchData(firstRow:Int=0) = withContext(Dispatchers.IO){
     elements.forEach {
 
         val has = it.attr("name")=="csrf-token"
-        Log.e("csrf","element:$it,has csrf token:$has")
+//        Log.e("csrf","element:$it,has csrf token:$has")
         if(has){
             val result = Jsoup.connect("$ROOT_URL/home/search/rsList")
                     .ignoreContentType(true)
@@ -107,7 +107,7 @@ suspend fun fetchData(firstRow:Int=0) = withContext(Dispatchers.IO){
                 isLenient = true
                 ignoreUnknownKeys = true
             }.decodeFromString<SearchJson>(result.body())
-            Log.e("serial","serial size:${serial.data.data.size}")
+//            Log.e("serial","serial size:${serial.data.data.size}")
             return@withContext serial
         }
     }

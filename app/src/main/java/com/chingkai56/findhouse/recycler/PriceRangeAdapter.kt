@@ -1,10 +1,11 @@
-package com.chingkai56.findhouse
+package com.chingkai56.findhouse.recycler
 
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.chingkai56.findhouse.R
 import kotlinx.android.synthetic.main.item_price_range.view.*
 
 class PriceRangeAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>(){
@@ -38,7 +39,7 @@ class PriceRangeAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>(){
 
 
     inner class PriceViewHolder(itemView: View):RecyclerView.ViewHolder(itemView){
-        fun bind(item:PriceRange){
+        fun bind(item: PriceRange){
             itemView.textview_price_range.text = item.rangeName
         }
     }

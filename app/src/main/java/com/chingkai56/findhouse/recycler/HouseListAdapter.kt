@@ -1,4 +1,4 @@
-package com.chingkai56.findhouse.adapter
+package com.chingkai56.findhouse.recycler
 
 import android.view.LayoutInflater
 import android.view.ViewGroup

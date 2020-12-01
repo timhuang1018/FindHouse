@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
 
+import com.chingkai56.findhouse.recycler.PriceRangeAdapter;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -16,7 +17,7 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
-import static com.chingkai56.findhouse.PriceRangeAdapterKt.priceRangeData;
+import static com.chingkai56.findhouse.recycler.PriceRangeAdapterKt.priceRangeData;
 
 public class HouseMapsActivity extends FragmentActivity implements OnMapReadyCallback {
 

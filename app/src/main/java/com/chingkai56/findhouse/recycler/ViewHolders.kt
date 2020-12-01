@@ -1,4 +1,4 @@
-package com.chingkai56.findhouse.adapter
+package com.chingkai56.findhouse.recycler
 
 import android.content.Intent
 import android.net.Uri
