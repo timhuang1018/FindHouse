@@ -1,11 +1,11 @@
 package com.chingkai56.findhouse.viewmodels
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
+import com.chingkai56.findhouse.config.ConfigProvider
 import com.chingkai56.findhouse.data.domain.HouseUI
 import com.chingkai56.findhouse.data.repository.HouseRepository
+import com.chingkai56.findhouse.helper.OptionDisplayState
+import com.chingkai56.findhouse.helper.RecyclerItem
 import kotlinx.coroutines.launch
 
 /**
@@ -16,6 +16,22 @@ class HouseListViewModel:ViewModel() {
 
     private val repository  = HouseRepository()
     val isRefreshing = MutableLiveData<Boolean>()
+
+    private val _state = MutableLiveData<OptionDisplayState>(OptionDisplayState.NO_DISPLAY)
+    val state :LiveData<OptionDisplayState>
+    get() = _state
+
+    //TODO solve put same data repetitively will cause view blinking
+    val options :LiveData<List<RecyclerItem>> = state.map {
+        when(it){
+            OptionDisplayState.PRICE->{
+                ConfigProvider.priceRangeData()
+            }
+            else->{
+                listOf()
+            }
+        }
+    }
 
     init {
         refresh()
@@ -35,5 +51,14 @@ class HouseListViewModel:ViewModel() {
             repository.fetch()
             isRefreshing.value = false
         }
+    }
+
+    fun setOptionState(state:OptionDisplayState) {
+        //if state is shown, this time will make it not display
+        if (_state.value==state){
+            _state.value = OptionDisplayState.NO_DISPLAY
+            return
+        }
+        _state.value = state
     }
 }

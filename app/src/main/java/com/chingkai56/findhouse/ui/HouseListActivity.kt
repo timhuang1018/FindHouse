@@ -4,18 +4,30 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
+import android.widget.LinearLayout
+import android.widget.TextView
+import androidx.core.content.ContextCompat
+import androidx.core.view.forEach
+import androidx.core.view.isNotEmpty
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.chingkai56.findhouse.R
-import com.chingkai56.findhouse.recycler.HouseListAdapter
 import com.chingkai56.findhouse.databinding.ActivityHouseListBinding
+import com.chingkai56.findhouse.helper.BaseListAdapter
+import com.chingkai56.findhouse.helper.OptionDisplayState
+import com.chingkai56.findhouse.recycler.HouseListAdapter
+import com.chingkai56.findhouse.recycler.PriceCommonCell
+import com.chingkai56.findhouse.recycler.PriceCustomCell
 import com.chingkai56.findhouse.viewmodels.HouseListViewModel
+
 
 class HouseListActivity : BaseActivity() {
 
     private lateinit var binding :ActivityHouseListBinding
     private val adapter = HouseListAdapter(this)
     private val viewModel = HouseListViewModel()
+    private val optionAdapter = BaseListAdapter(PriceCustomCell,PriceCommonCell)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -24,6 +36,11 @@ class HouseListActivity : BaseActivity() {
         supportActionBar?.setDisplayShowTitleEnabled(false)
         binding.verticalList.layoutManager = LinearLayoutManager(this)
         binding.verticalList.adapter = adapter
+
+        binding.recyclerOptions.apply {
+            adapter = optionAdapter
+            layoutManager = LinearLayoutManager(context)
+        }
 
         viewModel.getHouses().observe(this, Observer {
             adapter.submitList(it)
@@ -36,6 +53,52 @@ class HouseListActivity : BaseActivity() {
         viewModel.isRefreshing.observe(this,{
             binding.refreshLayout.isRefreshing = it
         })
+
+        setListener()
+        dataBinding()
+    }
+
+    private fun dataBinding() {
+        viewModel.options.observe(this,{
+            optionAdapter.submitList(it)
+        })
+
+        viewModel.state.observe(this, Observer { state ->
+            when(state){
+                OptionDisplayState.NO_DISPLAY->{
+                    optionVisible(noOptions = true)
+                }
+                OptionDisplayState.LOCATION->{
+                    optionVisible(binding.tvLocationOption)
+                }
+                OptionDisplayState.TYPE->{
+                    optionVisible(binding.tvTypeOption)
+                }
+
+                OptionDisplayState.PRICE->{
+                    optionVisible(binding.tvPriceOption)
+                }
+                OptionDisplayState.MORE->{
+                    optionVisible(binding.tvMoreOptions)
+                }
+            }
+        })
+    }
+
+    private fun setListener() {
+        binding.locationOptionContainer.setOnClickListener{
+            viewModel.setOptionState(OptionDisplayState.LOCATION)
+        }
+        binding.typeOptionContainer.setOnClickListener{
+            viewModel.setOptionState(OptionDisplayState.TYPE)
+        }
+        binding.priceOptionContainer.setOnClickListener{
+            viewModel.setOptionState(OptionDisplayState.PRICE)
+        }
+        binding.moreOptionContainer.setOnClickListener{
+            viewModel.setOptionState(OptionDisplayState.MORE)
+        }
+
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -58,6 +121,30 @@ class HouseListActivity : BaseActivity() {
 
     override fun sealOrNot(id: Int) {
         viewModel.sealHouse(id)
+    }
+
+    private fun optionVisible(view: TextView?=null,noOptions:Boolean=false) {
+        binding.recyclerOptions.apply {
+            visibility = if (noOptions){
+                View.GONE
+            }else{
+                View.VISIBLE
+            }
+        }
+        //turn every arrow to drop down
+        val ll = binding.root.getChildAt(0)
+        if (ll is LinearLayout){
+            ll.forEach { innerLL->
+                if (innerLL is LinearLayout && innerLL.isNotEmpty()){
+                    innerLL.getChildAt(0).takeIf {it is TextView}?.let { textview->
+                        (textview as TextView).setCompoundDrawablesWithIntrinsicBounds(null,null,ContextCompat.getDrawable(this,R.drawable.ic_arrow_drop_down),null)
+                    }
+
+                }
+            }
+        }
+        //make necessary arrow to drop up
+        view?.setCompoundDrawablesWithIntrinsicBounds(null,null,ContextCompat.getDrawable(this,R.drawable.ic_arrow_drop_up),null)
     }
 }
 

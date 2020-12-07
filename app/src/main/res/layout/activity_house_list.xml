@@ -6,29 +6,89 @@
     android:layout_height="match_parent"
     tools:context=".ui.HouseListActivity">
     
-<!--    <Toolbar-->
-<!--        android:id="@+id/toolbar"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="?attr/actionBarSize"-->
-<!--        app:layout_constraintTop_toTopOf="parent"-->
-<!--        android:gravity="center"-->
-<!--        android:contentInsetStart="0dp"-->
-<!--        >-->
-<!--        <TextView-->
-<!--            android:id="@+id/title"-->
-<!--            android:text="租屋"-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:textSize="16sp"-->
-<!--            android:gravity="center"-->
+    <LinearLayout
+        android:id="@+id/toolbar_options"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        app:layout_constraintTop_toTopOf="parent"
+        >
+        <LinearLayout
+            android:id="@+id/location_option_container"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            >
+            <TextView
+                android:id="@+id/tv_location_option"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:hint="縣市"
+                android:gravity="center"
+                app:drawableEndCompat="@drawable/ic_arrow_drop_down" />
+        </LinearLayout>
 
-<!--            />-->
-<!--    </Toolbar>-->
+    <LinearLayout
+        android:id="@+id/type_option_container"
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        >
+        <TextView
+            android:id="@+id/tv_type_option"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:hint="類型"
+            android:gravity="center"
+            app:drawableEndCompat="@drawable/ic_arrow_drop_down" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/price_option_container"
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        >
+        <TextView
+            android:id="@+id/tv_price_option"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:hint="租金"
+            android:gravity="center"
+            app:drawableEndCompat="@drawable/ic_arrow_drop_down" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/more_option_container"
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        >
+
+        <TextView
+            android:id="@+id/tv_more_options"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:hint="更多"
+            android:gravity="center"
+            app:drawableEndCompat="@drawable/ic_arrow_drop_down" />
+
+
+    </LinearLayout>
+
+    </LinearLayout>
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/refresh_layout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintTop_toBottomOf="@id/toolbar_options"
+        app:layout_constraintBottom_toBottomOf="parent"
         >
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/vertical_list"
@@ -36,5 +96,13 @@
             android:layout_height="match_parent"/>
 
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recycler_options"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/toolbar_options"
+        android:visibility="gone"
+        />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

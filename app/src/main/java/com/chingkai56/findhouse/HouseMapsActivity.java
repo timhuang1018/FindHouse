@@ -2,14 +2,12 @@ package com.chingkai56.findhouse;
 
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.FragmentActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
 
-import com.chingkai56.findhouse.recycler.PriceRangeAdapter;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -17,13 +15,9 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
-import static com.chingkai56.findhouse.recycler.PriceRangeAdapterKt.priceRangeData;
-
 public class HouseMapsActivity extends FragmentActivity implements OnMapReadyCallback {
 
     private GoogleMap mMap;
-    //adapter to control list of price range item for 租金 tab
-    private PriceRangeAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,11 +29,6 @@ public class HouseMapsActivity extends FragmentActivity implements OnMapReadyCal
 //        mapFragment.getMapAsync(this);
 
         RecyclerView verticalList = findViewById(R.id.recycler_vertical_list_conditions);
-        //init price range adapter ,bind with recyclerview and add data in it
-        adapter = new PriceRangeAdapter();
-        verticalList.setAdapter(adapter);
-        verticalList.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
-        adapter.addData(priceRangeData());
 
 //        RemoteApiKt.fetchData();
 
