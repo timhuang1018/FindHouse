@@ -1,20 +1,28 @@
 package com.chingkai56.findhouse.data.repository
 
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import com.chingkai56.findhouse.config.BaseApplication
 import com.chingkai56.findhouse.config.ConfigProvider
 import com.chingkai56.findhouse.data.domain.HouseUI
+import com.chingkai56.findhouse.data.domain.OptionStorage
 import com.chingkai56.findhouse.data.source.LocalDataSource
+import com.chingkai56.findhouse.data.source.RemoteDataSource
 import com.chingkai56.findhouse.fetchData
 import com.chingkai56.findhouse.recycler.HouseConfig
 import timber.log.Timber
 
 /**
  * Created by timhuang on 2020/10/14.
+ * Aim for dealing data processing in this layer, call remote to fetch
+ * Hold one search option live data to represent all search option , relate ui display count on this,
+ * any modification of option should be operated by [HouseRepository]
  **/
 
-class HouseRepository {
-    private val localDataSource = LocalDataSource(BaseApplication.getDb())
+class HouseRepository(private val remoteDataSource:RemoteDataSource,
+                      private val localDataSource :LocalDataSource= LocalDataSource(BaseApplication.getDb())) {
+
+    private val searchOptions = MutableLiveData<OptionStorage>()
 
     /**
      * if has new data, @return true

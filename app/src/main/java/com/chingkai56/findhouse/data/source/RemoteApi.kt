@@ -71,14 +71,13 @@ suspend fun getHouses(token:String?=null): List<RentHouse> {
     }
 }
 
-suspend fun fetchData(firstRow:Int=0) = withContext(Dispatchers.IO){
+suspend fun fetchData(params:Map<String,String>,firstRow:Int=0) = withContext(Dispatchers.IO){
     val doc2 = Jsoup.connect(ROOT_URL).run {
         this.header("user-agent","Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/81.0.4044.129 Safari/537.36")
         execute()
     }
     val elements = doc2.parse().getElementsByTag("meta")
     elements.forEach {
-
         val has = it.attr("name")=="csrf-token"
 //        Log.e("csrf","element:$it,has csrf token:$has")
         if(has){
@@ -87,20 +86,23 @@ suspend fun fetchData(firstRow:Int=0) = withContext(Dispatchers.IO){
                     .run {
                         this.cookies(doc2.cookies())
                         header("X-CSRF-TOKEN",it.attr("content"))
-                        data("is_new_list","1")
-                        data("type","1")
-                        data("kind","1")
-//                        data("shape","2")
-                        data("searchtype","1")
-                        data("regionid","1")
-                        data("area","13,40")
-                        data("patternMore","1,2")
-                        data("rentprice","14000,27000")
-                        data("option","cold")
-                        data("hasimg","1")
-                        data("not_cover", "1")
-                        data("firstRow", firstRow.toString())
-
+                        params.toList().forEach { param->
+                            //key, value
+                            data(param.first,param.second)
+                        }
+//                        data("is_new_list","1")
+//                        data("type","1")
+//                        data("kind","1")
+////                        data("shape","2")
+//                        data("searchtype","1")
+//                        data("regionid","1")
+//                        data("area","13,40")
+//                        data("patternMore","1,2")
+//                        data("rentprice","14000,27000")
+//                        data("option","cold")
+//                        data("hasimg","1")
+//                        data("not_cover", "1")
+//                        data("firstRow", firstRow.toString())
                         execute()
                     }
             val serial = Json{

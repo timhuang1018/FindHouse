@@ -16,49 +16,13 @@ import com.chingkai56.findhouse.helper.Cell
 import com.chingkai56.findhouse.helper.RecyclerItem
 import kotlinx.android.synthetic.main.item_price_range.view.*
 
-class PriceRangeAdapter : ListAdapter<PriceRange,RecyclerView.ViewHolder>(PriceDiff){
-
-    override fun getItemViewType(position: Int): Int {
-        return if (getItem(position).id==ConfigProvider.CUSTOM_PRICE_ID) TYPE_CUSTOM else TYPE_NORMAL
-    }
-
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-         if (viewType== TYPE_CUSTOM){
-             return PriceCustomViewHolder(
-                     LayoutInflater
-                             .from(parent.context)
-                             .inflate(R.layout.item_custom_price,parent,false)
-             )
-         }else {
-             return PriceViewHolder(
-                     LayoutInflater
-                             .from(parent.context)
-                             .inflate(R.layout.item_price_range,parent,false)
-             )
-         }
-    }
-
-    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        val item = getItem(position)
-        Log.d("adapter","item :$item")
-        if (holder is PriceViewHolder){
-            holder.bind(item)
-        }
-    }
-
-    companion object{
-        const val TYPE_NORMAL = 0
-        const val TYPE_CUSTOM = 1
-    }
-
-}
-
 object PriceCommonCell:Cell<RecyclerItem>(){
     override fun belongsTo(item: RecyclerItem?) = item is PriceRange
     override fun type() = R.layout.item_price_range
     override fun holder(parent: ViewGroup, viewType: Int, viewModel: ViewModel?): RecyclerView.ViewHolder {
        return PriceViewHolder(
-               parent.viewOf(viewType)
+               parent.viewOf(viewType),
+               viewModel
        )
     }
     override fun bind(holder: RecyclerView.ViewHolder, item: RecyclerItem?, listener: AdapterListener?) {
@@ -73,7 +37,8 @@ object PriceCustomCell:Cell<RecyclerItem>(){
     override fun type() = R.layout.item_custom_price
     override fun holder(parent: ViewGroup, viewType: Int, viewModel: ViewModel?): RecyclerView.ViewHolder {
         return PriceCustomViewHolder(
-                parent.viewOf(viewType)
+                parent.viewOf(viewType),
+                viewModel
         )
     }
     override fun bind(holder: RecyclerView.ViewHolder, item: RecyclerItem?, listener: AdapterListener?) {
@@ -83,13 +48,13 @@ object PriceCustomCell:Cell<RecyclerItem>(){
     }
 }
 
-class PriceViewHolder(itemView: View):RecyclerView.ViewHolder(itemView){
+class PriceViewHolder(itemView: View,val viewModel: ViewModel?):RecyclerView.ViewHolder(itemView){
     fun bind(item: PriceRange){
         itemView.textview_price_range.text = item.rangeName
     }
 }
 
-class PriceCustomViewHolder(itemView: View):RecyclerView.ViewHolder(itemView){
+class PriceCustomViewHolder(itemView: View,val viewModel: ViewModel?):RecyclerView.ViewHolder(itemView){
     fun bind(item:PriceRange){
 
     }

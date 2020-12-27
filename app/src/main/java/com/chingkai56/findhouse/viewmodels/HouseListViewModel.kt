@@ -12,9 +12,9 @@ import kotlinx.coroutines.launch
  * Created by timhuang on 2020/10/14.
  **/
 
-class HouseListViewModel:ViewModel() {
+class HouseListViewModel(private val repository:HouseRepository):ViewModel() {
 
-    private val repository  = HouseRepository()
+
     val isRefreshing = MutableLiveData<Boolean>()
 
     private val _state = MutableLiveData<OptionDisplayState>(OptionDisplayState.NO_DISPLAY)
@@ -60,5 +60,11 @@ class HouseListViewModel:ViewModel() {
             return
         }
         _state.value = state
+    }
+}
+
+class HouseListViewModelFactory(private val repository:HouseRepository):ViewModelProvider.NewInstanceFactory(){
+    override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+        return HouseListViewModel(repository) as T
     }
 }

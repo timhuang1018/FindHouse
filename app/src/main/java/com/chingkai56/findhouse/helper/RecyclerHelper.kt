@@ -14,7 +14,7 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import timber.log.Timber
 
-open class BaseListAdapter (vararg types: Cell<RecyclerItem>, private val listener: AdapterListener?=null)
+open class BaseListAdapter (vararg types: Cell<RecyclerItem>, private val listener: AdapterListener?=null,private val viewModel: ViewModel?=null)
     : ListAdapter<RecyclerItem, RecyclerView.ViewHolder>(
         BASE_DIFF_CALLBACK
 ){
@@ -28,7 +28,7 @@ open class BaseListAdapter (vararg types: Cell<RecyclerItem>, private val listen
         return cellTypes.of(item).type()
     }
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        return cellTypes.of(viewType).holder(parent, viewType)
+        return cellTypes.of(viewType).holder(parent, viewType,viewModel)
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {

@@ -11,8 +11,10 @@ import androidx.core.content.ContextCompat
 import androidx.core.view.forEach
 import androidx.core.view.isNotEmpty
 import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.chingkai56.findhouse.R
+import com.chingkai56.findhouse.data.repository.HouseRepository
 import com.chingkai56.findhouse.databinding.ActivityHouseListBinding
 import com.chingkai56.findhouse.helper.BaseListAdapter
 import com.chingkai56.findhouse.helper.OptionDisplayState
@@ -20,14 +22,15 @@ import com.chingkai56.findhouse.recycler.HouseListAdapter
 import com.chingkai56.findhouse.recycler.PriceCommonCell
 import com.chingkai56.findhouse.recycler.PriceCustomCell
 import com.chingkai56.findhouse.viewmodels.HouseListViewModel
+import com.chingkai56.findhouse.viewmodels.HouseListViewModelFactory
 
 
 class HouseListActivity : BaseActivity() {
 
     private lateinit var binding :ActivityHouseListBinding
     private val adapter = HouseListAdapter(this)
-    private val viewModel = HouseListViewModel()
-    private val optionAdapter = BaseListAdapter(PriceCustomCell,PriceCommonCell)
+    private val viewModel : HouseListViewModel = ViewModelProvider(this,HouseListViewModelFactory(HouseRepository())).get(HouseListViewModel::class.java)
+    private val optionAdapter = BaseListAdapter(PriceCustomCell,PriceCommonCell,viewModel = viewModel)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
