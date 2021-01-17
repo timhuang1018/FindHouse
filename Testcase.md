@@ -19,3 +19,13 @@
 
 #### House Setting Page
 + [ ] 
+
+
+
+## Future
+#### Basic Feature
++ [ ] data which user haven't seen would be highlighted
+
+
+#### Friendly Features
++ [ ] sealed list, sort by sealed time(new row of house.db)
