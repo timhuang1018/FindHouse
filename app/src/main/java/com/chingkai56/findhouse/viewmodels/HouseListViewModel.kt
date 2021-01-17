@@ -21,7 +21,7 @@ class HouseListViewModel(private val repository:HouseRepository):ViewModel() {
     val state :LiveData<OptionDisplayState>
     get() = _state
 
-    //TODO solve put same data repetitively will cause view blinking
+    //TODO solve put same data repetitively will cause view blinking, since state triger each time
     val options :LiveData<List<RecyclerItem>> = state.map {
         when(it){
             OptionDisplayState.PRICE->{

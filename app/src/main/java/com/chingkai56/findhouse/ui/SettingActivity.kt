@@ -2,10 +2,12 @@ package com.chingkai56.findhouse.ui
 
 import android.os.Bundle
 import android.widget.Toast
+import androidx.activity.viewModels
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.chingkai56.findhouse.recycler.HouseListAdapter
 import com.chingkai56.findhouse.databinding.ActivitySettingBinding
+import com.chingkai56.findhouse.di.DependencyProvider
 import com.chingkai56.findhouse.helper.ConfigClickListener
 import com.chingkai56.findhouse.recycler.ConfigSwitchAdapter
 import com.chingkai56.findhouse.viewmodels.SettingViewModel
@@ -16,7 +18,9 @@ class SettingActivity : BaseActivity(),ConfigClickListener {
     private val adapter = HouseListAdapter(this)
     private val configAdapter = ConfigSwitchAdapter(this)
     private lateinit var binding :ActivitySettingBinding
-    private val viewModel = SettingViewModel()
+    private val viewModel : SettingViewModel by viewModels {
+        DependencyProvider.provideSettingViewModelFactory(this)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

@@ -1,5 +1,7 @@
 package com.chingkai56.findhouse.config
 
+import com.chingkai56.findhouse.BuildConfig
+
 object HouseKeyWord {
     const val Kind = "kind"
     const val Shape = "shape"
@@ -12,4 +14,6 @@ object HouseKeyWord {
     const val PriceMin = "price min"
     const val PriceMax = "price max"
     const val Option = "option"
+
+    const val ApplicationName = BuildConfig.APPLICATION_ID
 }

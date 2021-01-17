@@ -8,6 +8,7 @@ import com.chingkai56.findhouse.data.domain.HouseUI
 import com.chingkai56.findhouse.data.domain.OptionStorage
 import com.chingkai56.findhouse.data.source.LocalDataSource
 import com.chingkai56.findhouse.data.source.RemoteDataSource
+import com.chingkai56.findhouse.data.source.SharePrefStorage
 import com.chingkai56.findhouse.fetchData
 import com.chingkai56.findhouse.recycler.HouseConfig
 import timber.log.Timber
@@ -19,8 +20,10 @@ import timber.log.Timber
  * any modification of option should be operated by [HouseRepository]
  **/
 
-class HouseRepository(private val remoteDataSource:RemoteDataSource,
-                      private val localDataSource :LocalDataSource= LocalDataSource(BaseApplication.getDb())) {
+class HouseRepository(
+//        private val remoteDataSource:RemoteDataSource,
+        private val sharePref: SharePrefStorage,
+        private val localDataSource :LocalDataSource= LocalDataSource(BaseApplication.getDb())) {
 
     private val searchOptions = MutableLiveData<OptionStorage>()
 
@@ -30,10 +33,12 @@ class HouseRepository(private val remoteDataSource:RemoteDataSource,
     suspend fun fetch(): Boolean {
         Timber.d("fetch called")
         var shouldNotify = false
+        val options = searchOptions.value ?: return false
         try {
             var firstRow = 0
+
             while (firstRow%30==0){
-                val result = fetchData(firstRow).data.data
+                val result = fetchData(options.asQueryParams(),firstRow).data.data
                 val hasNew = localDataSource.insertItems(result)
                 if (hasNew){
                     shouldNotify = true

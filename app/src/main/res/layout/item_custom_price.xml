@@ -2,6 +2,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:background="@drawable/header_item_divider"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <EditText
@@ -15,13 +16,15 @@
         android:hint="@string/text_min_price"
         android:inputType="number"
         android:background="@drawable/thin_border"
+        android:paddingStart="4dp"
+        android:paddingEnd="4dp"
         />
 
     <View
         android:id="@+id/hyphen"
-        android:layout_width="20dp"
-        android:layout_height="2dp"
-        android:background="@color/header_gray"
+        android:layout_width="15dp"
+        android:layout_height="1dp"
+        android:background="@color/black_opacity_50"
         app:layout_constraintStart_toEndOf="@id/et_price_min"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -38,13 +41,17 @@
         app:layout_constraintBottom_toBottomOf="@id/et_price_min"
         app:layout_constraintStart_toEndOf="@id/hyphen"
         android:layout_marginStart="@dimen/default_margin"
+        android:paddingStart="4dp"
+        android:paddingEnd="4dp"
         />
 
-    <Button
+    <TextView
         android:id="@+id/bt_confirm"
-        android:layout_width="wrap_content"
+        android:layout_width="60dp"
         android:layout_height="40dp"
         android:text="@string/text_confirm"
+        android:gravity="center"
+        android:background="@drawable/background_button"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/et_price_max"
         app:layout_constraintBottom_toBottomOf="@id/et_price_min"

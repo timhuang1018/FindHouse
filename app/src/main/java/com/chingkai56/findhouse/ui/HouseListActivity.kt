@@ -7,58 +7,53 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.activity.viewModels
 import androidx.core.content.ContextCompat
 import androidx.core.view.forEach
 import androidx.core.view.isNotEmpty
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.chingkai56.findhouse.R
-import com.chingkai56.findhouse.data.repository.HouseRepository
 import com.chingkai56.findhouse.databinding.ActivityHouseListBinding
+import com.chingkai56.findhouse.di.DependencyProvider
 import com.chingkai56.findhouse.helper.BaseListAdapter
 import com.chingkai56.findhouse.helper.OptionDisplayState
 import com.chingkai56.findhouse.recycler.HouseListAdapter
 import com.chingkai56.findhouse.recycler.PriceCommonCell
 import com.chingkai56.findhouse.recycler.PriceCustomCell
 import com.chingkai56.findhouse.viewmodels.HouseListViewModel
-import com.chingkai56.findhouse.viewmodels.HouseListViewModelFactory
 
 
 class HouseListActivity : BaseActivity() {
 
     private lateinit var binding :ActivityHouseListBinding
     private val adapter = HouseListAdapter(this)
-    private val viewModel : HouseListViewModel = ViewModelProvider(this,HouseListViewModelFactory(HouseRepository())).get(HouseListViewModel::class.java)
-    private val optionAdapter = BaseListAdapter(PriceCustomCell,PriceCommonCell,viewModel = viewModel)
+    private val viewModel : HouseListViewModel by viewModels{
+        DependencyProvider.provideHouseListViewModelFactory(this)
+    }
+    private lateinit var optionAdapter :BaseListAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        setupUI()
+        setListener()
+        dataBinding()
+    }
+
+    private fun setupUI() {
         binding = ActivityHouseListBinding.inflate(layoutInflater)
         setContentView(binding.root)
         supportActionBar?.setDisplayShowTitleEnabled(false)
         binding.verticalList.layoutManager = LinearLayoutManager(this)
         binding.verticalList.adapter = adapter
 
+        optionAdapter = BaseListAdapter(PriceCustomCell,PriceCommonCell,viewModel = viewModel)
+
         binding.recyclerOptions.apply {
             adapter = optionAdapter
             layoutManager = LinearLayoutManager(context)
         }
-
-        viewModel.getHouses().observe(this, Observer {
-            adapter.submitList(it)
-        })
-
-        binding.refreshLayout.setOnRefreshListener {
-            viewModel.refresh()
-        }
-
-        viewModel.isRefreshing.observe(this,{
-            binding.refreshLayout.isRefreshing = it
-        })
-
-        setListener()
-        dataBinding()
     }
 
     private fun dataBinding() {
@@ -86,6 +81,14 @@ class HouseListActivity : BaseActivity() {
                 }
             }
         })
+
+        viewModel.getHouses().observe(this, Observer {
+            adapter.submitList(it)
+        })
+
+        viewModel.isRefreshing.observe(this,{
+            binding.refreshLayout.isRefreshing = it
+        })
     }
 
     private fun setListener() {
@@ -102,6 +105,9 @@ class HouseListActivity : BaseActivity() {
             viewModel.setOptionState(OptionDisplayState.MORE)
         }
 
+        binding.refreshLayout.setOnRefreshListener {
+            viewModel.refresh()
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -142,7 +148,6 @@ class HouseListActivity : BaseActivity() {
                     innerLL.getChildAt(0).takeIf {it is TextView}?.let { textview->
                         (textview as TextView).setCompoundDrawablesWithIntrinsicBounds(null,null,ContextCompat.getDrawable(this,R.drawable.ic_arrow_drop_down),null)
                     }
-
                 }
             }
         }

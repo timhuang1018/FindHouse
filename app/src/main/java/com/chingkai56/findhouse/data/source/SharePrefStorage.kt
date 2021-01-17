@@ -1,14 +1,18 @@
 package com.chingkai56.findhouse.data.source
 
+import android.app.Activity
+import android.content.Context
 import android.content.SharedPreferences
 import androidx.core.content.edit
 import com.chingkai56.findhouse.config.HouseKeyWord
 import com.chingkai56.findhouse.data.domain.OptionStorage
+import com.chingkai56.findhouse.recycler.HouseConfig
 
 /**
  * Created by TimHuang on 2020/12/9.
  */
-class SharePrefStorage(private val sharePref:SharedPreferences) {
+class SharePrefStorage(context:Context) {
+    private val sharePref:SharedPreferences = context.getSharedPreferences(HouseKeyWord.ApplicationName,Activity.MODE_PRIVATE)
     fun getQueryCondition(): OptionStorage {
         return sharePref.run {
             OptionStorage(

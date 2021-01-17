@@ -11,6 +11,7 @@ import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
 import com.chingkai56.findhouse.R
 import com.chingkai56.findhouse.data.repository.HouseRepository
+import com.chingkai56.findhouse.di.DependencyProvider
 import com.chingkai56.findhouse.ui.HouseListActivity
 import timber.log.Timber
 
@@ -19,7 +20,7 @@ import timber.log.Timber
  **/
 
 class FetchHousesWork(context: Context, workerParams: WorkerParameters) : CoroutineWorker(context, workerParams) {
-    private val repository = HouseRepository()
+    private val repository = DependencyProvider.provideHouseRepository(context)
     override suspend fun doWork(): Result {
         Timber.e("start to work...")
         val shouldNotify = repository.fetch()
