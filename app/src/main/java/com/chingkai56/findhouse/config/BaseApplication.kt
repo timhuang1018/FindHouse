@@ -10,6 +10,7 @@ import com.chingkai56.findhouse.Database
 import com.chingkai56.findhouse.R
 import com.squareup.sqldelight.android.AndroidSqliteDriver
 import com.squareup.sqldelight.db.SqlDriver
+import timber.log.Timber
 
 /**
  * Created by timhuang on 2020/10/13.
@@ -26,6 +27,8 @@ class BaseApplication:Application() {
         instance = this
         driver = AndroidSqliteDriver(Database.Schema,this,"test.db")
         database = Database.invoke(driver)
+
+        Timber.plant(Timber.DebugTree())
 
         createChannel()
         val constraints = Constraints.Builder()

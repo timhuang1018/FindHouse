@@ -15,5 +15,7 @@ object HouseKeyWord {
     const val PriceMax = "price max"
     const val Option = "option"
 
+    const val PriceSelectIndex = "PriceSelectIndex"
+
     const val ApplicationName = BuildConfig.APPLICATION_ID
 }

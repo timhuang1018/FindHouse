@@ -6,7 +6,7 @@ import android.content.SharedPreferences
 import androidx.core.content.edit
 import com.chingkai56.findhouse.config.HouseKeyWord
 import com.chingkai56.findhouse.data.domain.OptionStorage
-import com.chingkai56.findhouse.recycler.HouseConfig
+import com.chingkai56.findhouse.data.domain.PriceRangeUI
 
 /**
  * Created by TimHuang on 2020/12/9.
@@ -25,8 +25,9 @@ class SharePrefStorage(context:Context) {
                     patternMore = getStringSet(HouseKeyWord.PatternMore,null),
                     priceMin = getInt(HouseKeyWord.PriceMin,0),
                     priceMax = getInt(HouseKeyWord.PriceMax,Int.MAX_VALUE),
-                    options = getStringSet(HouseKeyWord.Option,null)
-
+                    //these options is for query param in 591
+                    options = getStringSet(HouseKeyWord.Option,null),
+                    priceIndex = getInt(HouseKeyWord.PriceSelectIndex,-1)
             )
         }
     }
@@ -61,6 +62,18 @@ class SharePrefStorage(context:Context) {
         }
     }
 
+    fun getPriceSelectIndex(): Int {
+        //-1 means no selected index
+        return sharePref.getInt(HouseKeyWord.PriceSelectIndex,-1)
+    }
+
+    fun putPriceRange(item: PriceRangeUI) {
+        sharePref.edit {
+            putInt(HouseKeyWord.PriceSelectIndex,item.selectPosition)
+            putInt(HouseKeyWord.PriceMax,item.max)
+            putInt(HouseKeyWord.PriceMin,item.min)
+        }
+    }
 
 
 }

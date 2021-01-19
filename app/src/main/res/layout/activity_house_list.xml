@@ -24,6 +24,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:hint="縣市"
+                android:maxLines="1"
+                android:ellipsize="end"
                 android:gravity="center"
                 app:drawableEndCompat="@drawable/ic_arrow_drop_down" />
         </LinearLayout>
@@ -40,6 +42,8 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:hint="類型"
+            android:maxLines="1"
+            android:ellipsize="end"
             android:gravity="center"
             app:drawableEndCompat="@drawable/ic_arrow_drop_down" />
 
@@ -58,6 +62,8 @@
             android:layout_height="match_parent"
             android:hint="租金"
             android:gravity="center"
+            android:maxLines="1"
+            android:ellipsize="end"
             app:drawableEndCompat="@drawable/ic_arrow_drop_down" />
 
     </LinearLayout>
@@ -75,6 +81,8 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:hint="更多"
+            android:maxLines="1"
+            android:ellipsize="end"
             android:gravity="center"
             app:drawableEndCompat="@drawable/ic_arrow_drop_down" />
 

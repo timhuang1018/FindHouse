@@ -1,12 +1,12 @@
 package com.chingkai56.findhouse.viewmodels
 
 import androidx.lifecycle.*
-import com.chingkai56.findhouse.config.ConfigProvider
-import com.chingkai56.findhouse.data.domain.HouseUI
+import com.chingkai56.findhouse.data.domain.PriceRangeUI
 import com.chingkai56.findhouse.data.repository.HouseRepository
 import com.chingkai56.findhouse.helper.OptionDisplayState
 import com.chingkai56.findhouse.helper.RecyclerItem
 import kotlinx.coroutines.launch
+import timber.log.Timber
 
 /**
  * Created by timhuang on 2020/10/14.
@@ -21,11 +21,28 @@ class HouseListViewModel(private val repository:HouseRepository):ViewModel() {
     val state :LiveData<OptionDisplayState>
     get() = _state
 
+    private val searchOptions = repository.searchOptions
+
+    //TODO remove below two variable , bad practice to observe in viewModel
+    private val fetch = searchOptions.map {
+        refresh()
+    }
+    private val doNothingObserver = Observer<Unit> { }
+
+    val houses = searchOptions.switchMap {
+        repository.getHouses(it)
+    }
+
+    val pricePreview = searchOptions.map {
+        repository.getPricePreview(it.priceIndex)
+    }
+
     //TODO solve put same data repetitively will cause view blinking, since state triger each time
-    val options :LiveData<List<RecyclerItem>> = state.map {
+    val listItems :LiveData<List<RecyclerItem>> = state.map {
+        Timber.e("state:$it")
         when(it){
             OptionDisplayState.PRICE->{
-                ConfigProvider.priceRangeData()
+                repository.getPriceOptions()
             }
             else->{
                 listOf()
@@ -34,13 +51,13 @@ class HouseListViewModel(private val repository:HouseRepository):ViewModel() {
     }
 
     init {
-        refresh()
+        fetch.observeForever(doNothingObserver)
     }
 
 
-    fun getHouses(): LiveData<List<HouseUI>> {
-        return repository.getHouses()
-    }
+//    fun getHouses(): LiveData<List<HouseUI>> {
+//        return
+//    }
 
     fun sealHouse(id: Int) {
         repository.sealOrNot(id,toSeal = true)
@@ -60,6 +77,21 @@ class HouseListViewModel(private val repository:HouseRepository):ViewModel() {
             return
         }
         _state.value = state
+    }
+
+    fun changePrice(itemIdex: Int) {
+        listItems.value?.takeIf { it.size>itemIdex }?.let { list->
+            val item = list[itemIdex]
+            if(item is PriceRangeUI){
+                repository.putPriceChange(item)
+            }
+        }
+        _state.value = OptionDisplayState.NO_DISPLAY
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        fetch.removeObserver(doNothingObserver)
     }
 }
 

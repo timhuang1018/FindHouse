@@ -6,10 +6,12 @@ import com.chingkai56.findhouse.config.BaseApplication
 import com.chingkai56.findhouse.config.ConfigProvider
 import com.chingkai56.findhouse.data.domain.HouseUI
 import com.chingkai56.findhouse.data.domain.OptionStorage
+import com.chingkai56.findhouse.data.domain.PriceRangeUI
+import com.chingkai56.findhouse.data.domain.QueryPreview
 import com.chingkai56.findhouse.data.source.LocalDataSource
-import com.chingkai56.findhouse.data.source.RemoteDataSource
 import com.chingkai56.findhouse.data.source.SharePrefStorage
 import com.chingkai56.findhouse.fetchData
+import com.chingkai56.findhouse.helper.RecyclerItem
 import com.chingkai56.findhouse.recycler.HouseConfig
 import timber.log.Timber
 
@@ -25,18 +27,24 @@ class HouseRepository(
         private val sharePref: SharePrefStorage,
         private val localDataSource :LocalDataSource= LocalDataSource(BaseApplication.getDb())) {
 
-    private val searchOptions = MutableLiveData<OptionStorage>()
+    private val _searchOptions = MutableLiveData<OptionStorage>()
+    val searchOptions :LiveData<OptionStorage>
+    get() = _searchOptions
+
+    init {
+        updateOptions()
+    }
 
     /**
      * if has new data, @return true
      */
     suspend fun fetch(): Boolean {
-        Timber.d("fetch called")
         var shouldNotify = false
-        val options = searchOptions.value ?: return false
+        val options = _searchOptions.value ?: return false
+        Timber.d("fetch called")
         try {
             var firstRow = 0
-
+            //TODO if options change while fetching, restart fetching
             while (firstRow%30==0){
                 val result = fetchData(options.asQueryParams(),firstRow).data.data
                 val hasNew = localDataSource.insertItems(result)
@@ -54,8 +62,8 @@ class HouseRepository(
         return shouldNotify
     }
 
-    fun getHouses(): LiveData<List<HouseUI>>{
-        return localDataSource.getHouses()
+    fun getHouses(optionStorage: OptionStorage): LiveData<List<HouseUI>>{
+        return localDataSource.getHouses(optionStorage)
     }
 
     fun getSealedHouses(): LiveData<List<HouseUI>> {
@@ -67,6 +75,25 @@ class HouseRepository(
     }
 
     fun getAllConfigs(): List<HouseConfig> {
-        return ConfigProvider.allconfigs()
+        return ConfigProvider().allconfigs()
+    }
+
+    fun getPriceOptions(): List<RecyclerItem> {
+        return ConfigProvider().priceRangeData(sharePref.getPriceSelectIndex())
+    }
+
+    fun putPriceChange(item: PriceRangeUI) {
+        Timber.e("putPriceChange called")
+        sharePref.putPriceRange(item)
+        //refresh option config
+        updateOptions()
+    }
+
+    private fun updateOptions() {
+        _searchOptions.value = sharePref.getQueryCondition()
+    }
+
+    fun getPricePreview(priceIndex: Int): QueryPreview {
+        return ConfigProvider().getPriceTitle(priceIndex)
     }
 }

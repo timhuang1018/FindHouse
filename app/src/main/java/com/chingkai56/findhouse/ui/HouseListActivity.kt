@@ -22,6 +22,7 @@ import com.chingkai56.findhouse.recycler.HouseListAdapter
 import com.chingkai56.findhouse.recycler.PriceCommonCell
 import com.chingkai56.findhouse.recycler.PriceCustomCell
 import com.chingkai56.findhouse.viewmodels.HouseListViewModel
+import timber.log.Timber
 
 
 class HouseListActivity : BaseActivity() {
@@ -57,7 +58,8 @@ class HouseListActivity : BaseActivity() {
     }
 
     private fun dataBinding() {
-        viewModel.options.observe(this,{
+        viewModel.listItems.observe(this,{
+            Timber.e("list :$it")
             optionAdapter.submitList(it)
         })
 
@@ -82,12 +84,27 @@ class HouseListActivity : BaseActivity() {
             }
         })
 
-        viewModel.getHouses().observe(this, Observer {
+        viewModel.houses.observe(this, Observer {
+            Timber.e("houses:$it")
             adapter.submitList(it)
         })
 
         viewModel.isRefreshing.observe(this,{
             binding.refreshLayout.isRefreshing = it
+        })
+
+        viewModel.pricePreview.observe(this,{
+            Timber.e("price preview:$it")
+            binding.tvPriceOption.apply {
+                text = it.title
+                val color = if (it.isSelect){
+                    ContextCompat.getColor(context,R.color.colorAccent)
+                        }else{
+                    ContextCompat.getColor(context,R.color.default_text)
+                }
+                setTextColor(color)
+            }
+
         })
     }
 

@@ -2,8 +2,9 @@
 <resources>
     <color name="header_gray">#DBDFDF</color>
     <color name="black_opacity_50">#80000000</color>
-    <color name="black">#00000000</color>
+    <color name="black">#000000</color>
     <color name="white">#FFFFFF</color>
+    <color name="default_text">#808080</color>
     <color name="colorPrimary">#fcd0c3</color>
     <color name="colorAccent">#ed79a8</color>
     <color name="primaryLightColor">#fffff6</color>

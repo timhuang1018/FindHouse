@@ -60,8 +60,15 @@ SELECT * FROM house WHERE houseId=:houseId;
 updateSealed:
 UPDATE house SET isSealed = :isSealed,sealDate = :sealDate WHERE houseId=:houseId;
 
+getHousesByOptions:
+SELECT * FROM house
+WHERE isSealed IS NOT 1 AND regionId =:regionId AND CAST(price AS INTEGER) >= :priceMin AND CAST(price AS INTEGER) <= :priceMax
+ORDER BY createDate DESC;
+
 getHouses:
-SELECT * FROM house WHERE isSealed IS NOT 1 ORDER BY createDate DESC;
+SELECT * FROM house
+WHERE isSealed IS NOT 1
+ORDER BY createDate DESC;
 
 getSealed:
 SELECT * FROM house WHERE isSealed IS 1 ORDER BY sealDate IS NULL DESC;

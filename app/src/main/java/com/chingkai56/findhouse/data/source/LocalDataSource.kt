@@ -5,10 +5,12 @@ import androidx.lifecycle.asLiveData
 import com.chingkai56.findhouse.Database
 import com.chingkai56.findhouse.data.RentHouse
 import com.chingkai56.findhouse.data.domain.HouseUI
+import com.chingkai56.findhouse.data.domain.OptionStorage
 import com.squareup.sqldelight.Query
 import com.squareup.sqldelight.runtime.coroutines.asFlow
 import com.squareup.sqldelight.runtime.coroutines.mapToList
 import org.threeten.bp.Instant
+import timber.log.Timber
 
 /**
  * Created by timhuang on 2020/10/13.
@@ -97,21 +99,24 @@ class LocalDataSource(db:Database) {
         })
     }
 
-    fun getHouses(): LiveData<List<HouseUI>> {
-        return query.getHouses { houseId, userId, type, kind, postId, regionId, regionName, sectionName, sectionId, streetId, streetName, alleyName, caseName, caseId, layout, area, room, floor, allFloor, updateTime, condition, cover, refreshTime, closed, kindName, iconClass, fullAddress, shape, createDate, isSealed,sealDate, title, price ->
+    fun getHouses(option:OptionStorage): LiveData<List<HouseUI>> {
+        Timber.e("db has region id :${option.regionId},${option.priceMin},${option.priceMax}")
+        return query.getHouses()
+//        (regionId = option.regionId,priceMin = option.priceMin.toLong(),priceMax = option.priceMax.toLong())
+        { houseId, userId, type, kind, postId, regionId, regionName, sectionName, sectionId, streetId, streetName, alleyName, caseName, caseId, layout, area, room, floor, allFloor, updateTime, condition, cover, refreshTime, closed, kindName, iconClass, fullAddress, shape, createDate, isSealed, sealDate, title, price ->
             HouseUI(
                     id = houseId, userId = userId,
-                    type = type,kind = kind,postId = postId,
-                    regionId = regionId,regionName = regionName,
-                    sectionId = sectionId,sectionName = sectionName,
-                    streetId = streetId,streetName = streetName,
-                    alleyName = alleyName,caseId = caseId,
-                    caseName = caseName,layout = layout,area = area,
-                    room = room,floor = floor,allFloor = allFloor,
-                    updateTime = updateTime,condition = condition,cover = cover,
-                    refreshTime = refreshTime,closed = closed,kindName = kindName,
-                    iconClass = iconClass,fullAddress = fullAddress,shape = shape,
-                    title = title,price = price,isSealed = isSealed
+                    type = type, kind = kind, postId = postId,
+                    regionId = regionId, regionName = regionName,
+                    sectionId = sectionId, sectionName = sectionName,
+                    streetId = streetId, streetName = streetName,
+                    alleyName = alleyName, caseId = caseId,
+                    caseName = caseName, layout = layout, area = area,
+                    room = room, floor = floor, allFloor = allFloor,
+                    updateTime = updateTime, condition = condition, cover = cover,
+                    refreshTime = refreshTime, closed = closed, kindName = kindName,
+                    iconClass = iconClass, fullAddress = fullAddress, shape = shape,
+                    title = title, price = price, isSealed = isSealed
             )
         }.asFlow().mapToList().asLiveData()
     }
