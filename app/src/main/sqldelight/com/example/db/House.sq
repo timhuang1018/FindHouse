@@ -31,7 +31,7 @@ CREATE TABLE house(
         isSealed INTEGER AS Boolean NOT NULL DEFAULT 0,
         sealDate INTEGER,
         title TEXT NOT NULL,
-        price TEXT NOT NULL
+        price INTEGER NOT NULL
 );
 
 insertHouse:
@@ -62,7 +62,7 @@ UPDATE house SET isSealed = :isSealed,sealDate = :sealDate WHERE houseId=:houseI
 
 getHousesByOptions:
 SELECT * FROM house
-WHERE isSealed IS NOT 1 AND regionId =:regionId AND CAST(price AS INTEGER) >= :priceMin AND CAST(price AS INTEGER) <= :priceMax
+WHERE isSealed IS NOT 1 AND regionId =:regionId AND price >= :priceMin AND price <= :priceMax
 ORDER BY createDate DESC;
 
 getHouses:

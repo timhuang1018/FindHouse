@@ -24,7 +24,7 @@ class SharePrefStorage(context:Context) {
                     areaMax = getInt(HouseKeyWord.AreaMax,Int.MAX_VALUE),
                     patternMore = getStringSet(HouseKeyWord.PatternMore,null),
                     priceMin = getInt(HouseKeyWord.PriceMin,0),
-                    priceMax = getInt(HouseKeyWord.PriceMax,Int.MAX_VALUE),
+                    priceMax = getInt(HouseKeyWord.PriceMax,50000),
                     //these options is for query param in 591
                     options = getStringSet(HouseKeyWord.Option,null),
                     priceIndex = getInt(HouseKeyWord.PriceSelectIndex,-1)

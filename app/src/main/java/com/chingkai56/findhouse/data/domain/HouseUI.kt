@@ -35,6 +35,6 @@ data class HouseUI(
         val fullAddress:String,
         val shape:Int,
         val title:String,
-        val price:String,
+        val price:Long,
         val isSealed :Boolean
 ):ListItem

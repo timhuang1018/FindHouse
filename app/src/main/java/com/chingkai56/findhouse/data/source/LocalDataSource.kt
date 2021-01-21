@@ -52,7 +52,7 @@ class LocalDataSource(db:Database) {
                     updateTime = updateTime,condition = condition,cover = cover,
                     refreshTime = refreshTime,closed = closed,kindName = kindName,
                     iconClass = iconClass,fullAddress = fullAddress,shape = shape,
-                    title = title,price = price,createDate = Instant.now().epochSecond
+                    title = title,price = priceLong(price),createDate = Instant.now().epochSecond
             )
         }
     }
@@ -71,8 +71,18 @@ class LocalDataSource(db:Database) {
                     updateTime = updateTime,condition = condition,cover = cover,
                     refreshTime = refreshTime,closed = closed,kindName = kindName,
                     iconClass = iconClass,fullAddress = fullAddress,shape = shape,
-                    title = title,price = price
+                    title = title,price = priceLong(price)
             )
+        }
+    }
+
+    fun priceLong(price:String):Long{
+        return try {
+            price.replace(",","").toLong()
+        }catch (e:NumberFormatException){
+            Timber.e(e)
+            //negative means fail
+            -1
         }
     }
 
@@ -101,9 +111,9 @@ class LocalDataSource(db:Database) {
 
     fun getHouses(option:OptionStorage): LiveData<List<HouseUI>> {
         Timber.e("db has region id :${option.regionId},${option.priceMin},${option.priceMax}")
-        return query.getHouses()
-//        (regionId = option.regionId,priceMin = option.priceMin.toLong(),priceMax = option.priceMax.toLong())
+        return query.getHousesByOptions(regionId = option.regionId,priceMin = option.priceMin.toLong(),priceMax = option.priceMax.toLong())
         { houseId, userId, type, kind, postId, regionId, regionName, sectionName, sectionId, streetId, streetName, alleyName, caseName, caseId, layout, area, room, floor, allFloor, updateTime, condition, cover, refreshTime, closed, kindName, iconClass, fullAddress, shape, createDate, isSealed, sealDate, title, price ->
+            Timber.e("house raw:$houseId,$price")
             HouseUI(
                     id = houseId, userId = userId,
                     type = type, kind = kind, postId = postId,

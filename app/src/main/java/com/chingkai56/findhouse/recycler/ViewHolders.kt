@@ -22,7 +22,7 @@ class ListItemViewHolder(itemView: View):RecyclerView.ViewHolder(itemView){
         itemView.tv_title.text = item.title
         itemView.tv_address.text = item.fullAddress
         itemView.tv_subtitle.text = String.format("%s %s坪 %d/%d",item.layout,item.area.toString(),item.floor,item.allFloor)
-        itemView.tv_price.text = item.price
+        itemView.tv_price.text = item.price.toString()
         itemView.setOnClickListener {
             val uri = Uri.parse("https://rent.591.com.tw/rent-detail-${item.id}.html")
             val intent = Intent(Intent.ACTION_VIEW,uri)
