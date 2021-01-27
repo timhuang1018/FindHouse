@@ -85,7 +85,7 @@ class HouseListActivity : BaseActivity() {
         })
 
         viewModel.houses.observe(this, Observer {
-            Timber.e("houses:$it")
+//            Timber.e("houses:$it")
             adapter.submitList(it)
         })
 

@@ -69,7 +69,12 @@ class SharePrefStorage(context:Context) {
 
     fun putPriceRange(item: PriceRangeUI) {
         sharePref.edit {
-            putInt(HouseKeyWord.PriceSelectIndex,item.selectPosition)
+            //only id 1 is special (will clear up select position
+            if (item.id==1){
+                remove(HouseKeyWord.PriceSelectIndex)
+            }else{
+                putInt(HouseKeyWord.PriceSelectIndex,item.selectPosition)
+            }
             putInt(HouseKeyWord.PriceMax,item.max)
             putInt(HouseKeyWord.PriceMin,item.min)
         }

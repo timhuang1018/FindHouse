@@ -110,10 +110,8 @@ class LocalDataSource(db:Database) {
     }
 
     fun getHouses(option:OptionStorage): LiveData<List<HouseUI>> {
-        Timber.e("db has region id :${option.regionId},${option.priceMin},${option.priceMax}")
         return query.getHousesByOptions(regionId = option.regionId,priceMin = option.priceMin.toLong(),priceMax = option.priceMax.toLong())
         { houseId, userId, type, kind, postId, regionId, regionName, sectionName, sectionId, streetId, streetName, alleyName, caseName, caseId, layout, area, room, floor, allFloor, updateTime, condition, cover, refreshTime, closed, kindName, iconClass, fullAddress, shape, createDate, isSealed, sealDate, title, price ->
-            Timber.e("house raw:$houseId,$price")
             HouseUI(
                     id = houseId, userId = userId,
                     type = type, kind = kind, postId = postId,
