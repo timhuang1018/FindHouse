@@ -79,7 +79,7 @@ class HouseRepository(
     }
 
     fun getPriceOptions(): List<RecyclerItem> {
-        return ConfigProvider().priceRangeData(sharePref.getPriceSelectIndex())
+        return ConfigProvider().priceRangeData(sharePref)
     }
 
     fun putPriceChange(item: PriceRangeUI) {
@@ -94,6 +94,6 @@ class HouseRepository(
     }
 
     fun getPricePreview(priceIndex: Int): QueryPreview {
-        return ConfigProvider().getPriceTitle(priceIndex)
+        return ConfigProvider().getPriceTitle(priceIndex,sharePref)
     }
 }

@@ -55,7 +55,7 @@ data class OptionStorage(
 }
 data class PriceRangeUI(
         override val id:Int, val rangeName:String,
-        val min:Int, val max:Int,
+        var min:Int, var max:Int,
         val isCustom:Boolean =false, override val selectPosition: Int,
         override var isSelect: Boolean = false
 ):RecyclerItem,SelectQuery

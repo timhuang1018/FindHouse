@@ -80,5 +80,13 @@ class SharePrefStorage(context:Context) {
         }
     }
 
+    fun getPriceMin(): Int {
+        return sharePref.getInt(HouseKeyWord.PriceMin,0)
+    }
+
+    fun getPriceMax(): Int {
+        return sharePref.getInt(HouseKeyWord.PriceMax,0)
+    }
+
 
 }

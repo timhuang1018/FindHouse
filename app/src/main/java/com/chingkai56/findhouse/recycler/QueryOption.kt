@@ -12,6 +12,7 @@ import com.chingkai56.findhouse.helper.AdapterListener
 import com.chingkai56.findhouse.helper.Cell
 import com.chingkai56.findhouse.helper.RecyclerItem
 import com.chingkai56.findhouse.viewmodels.HouseListViewModel
+import kotlinx.android.synthetic.main.item_custom_price.view.*
 import kotlinx.android.synthetic.main.item_price_range.view.*
 
 object PriceCommonCell:Cell<RecyclerItem>(){
@@ -40,7 +41,7 @@ object PriceCustomCell:Cell<RecyclerItem>(){
         )
     }
     override fun bind(holder: RecyclerView.ViewHolder, item: RecyclerItem?, listener: AdapterListener?) {
-        if (holder is PriceViewHolder && item is PriceRangeUI){
+        if (holder is PriceCustomViewHolder && item is PriceRangeUI){
             holder.bind(item)
         }
     }
@@ -70,8 +71,21 @@ class PriceViewHolder(itemView: View,val viewModel: ViewModel?):RecyclerView.Vie
 }
 
 class PriceCustomViewHolder(itemView: View,val viewModel: ViewModel?):RecyclerView.ViewHolder(itemView){
+
     fun bind(item:PriceRangeUI){
 
+        if (item.isSelect){
+            itemView.et_price_min.setText(item.min.toString())
+            itemView.et_price_max.setText(item.max.toString())
+        }
+        //setting click listener here because data modification included
+        if (viewModel is HouseListViewModel){
+            itemView.bt_confirm.setOnClickListener {
+                item.min = itemView.et_price_min.text.toString().toInt()
+                item.max = itemView.et_price_max.text.toString().toInt()
+                viewModel.changePrice(adapterPosition)
+            }
+        }
     }
 }
 
