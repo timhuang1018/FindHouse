@@ -7,17 +7,19 @@ import androidx.lifecycle.ViewModel
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.chingkai56.findhouse.R
+import com.chingkai56.findhouse.data.domain.HouseType
 import com.chingkai56.findhouse.data.domain.PriceRangeUI
 import com.chingkai56.findhouse.helper.AdapterListener
 import com.chingkai56.findhouse.helper.Cell
 import com.chingkai56.findhouse.helper.RecyclerItem
 import com.chingkai56.findhouse.viewmodels.HouseListViewModel
 import kotlinx.android.synthetic.main.item_custom_price.view.*
-import kotlinx.android.synthetic.main.item_price_range.view.*
+import kotlinx.android.synthetic.main.item_normal_price_option.view.*
+import timber.log.Timber
 
 object PriceCommonCell:Cell<RecyclerItem>(){
     override fun belongsTo(item: RecyclerItem?) = item is PriceRangeUI
-    override fun type() = R.layout.item_price_range
+    override fun type() = R.layout.item_normal_price_option
     override fun holder(parent: ViewGroup, viewType: Int, viewModel: ViewModel?): RecyclerView.ViewHolder {
        return PriceViewHolder(
                parent.viewOf(viewType),
@@ -58,7 +60,8 @@ class PriceViewHolder(itemView: View,val viewModel: ViewModel?):RecyclerView.Vie
     }
 
     fun bind(item: PriceRangeUI){
-        itemView.textview_price_range.apply {
+        Timber.i("bind item:$item")
+        itemView.tv_title.apply {
             text = item.rangeName
             val color = if (item.isSelect){
                 ContextCompat.getColor(context,R.color.colorAccent)
@@ -96,6 +99,49 @@ object PriceDiff:DiffUtil.ItemCallback<PriceRangeUI>(){
 
     override fun areContentsTheSame(oldItem: PriceRangeUI, newItem: PriceRangeUI): Boolean {
         return oldItem.rangeName == newItem.rangeName
+    }
+
+}
+
+
+class HouseTypeViewHolder(itemView: View,val viewModel: ViewModel?):RecyclerView.ViewHolder(itemView){
+
+    init {
+        if (viewModel is HouseListViewModel){
+            itemView.setOnClickListener {
+                viewModel.changeType(adapterPosition)
+            }
+        }
+    }
+
+    fun bind(item:HouseType){
+        itemView.tv_title.apply {
+            text = item.name
+            val color = if (item.isSelect){
+                ContextCompat.getColor(context,R.color.colorAccent)
+            }else{
+                ContextCompat.getColor(context,R.color.default_text)
+            }
+            setTextColor(color)
+        }
+    }
+}
+
+object HouseTypeCell: Cell<RecyclerItem>() {
+    override fun belongsTo(item: RecyclerItem?) = item is HouseType
+    override fun type() = R.layout.item_house_type
+
+    override fun holder(parent: ViewGroup, viewType: Int, viewModel: ViewModel?): RecyclerView.ViewHolder {
+        return HouseTypeViewHolder(
+                parent.viewOf(viewType),
+                viewModel
+        )
+    }
+
+    override fun bind(holder: RecyclerView.ViewHolder, item: RecyclerItem?, listener: AdapterListener?) {
+        if (holder is HouseTypeViewHolder && item is HouseType){
+            holder.bind(item)
+        }
     }
 
 }

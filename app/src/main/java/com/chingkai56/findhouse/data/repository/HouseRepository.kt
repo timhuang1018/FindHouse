@@ -4,10 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.chingkai56.findhouse.config.BaseApplication
 import com.chingkai56.findhouse.config.ConfigProvider
-import com.chingkai56.findhouse.data.domain.HouseUI
-import com.chingkai56.findhouse.data.domain.OptionStorage
-import com.chingkai56.findhouse.data.domain.PriceRangeUI
-import com.chingkai56.findhouse.data.domain.QueryPreview
+import com.chingkai56.findhouse.data.domain.*
 import com.chingkai56.findhouse.data.source.LocalDataSource
 import com.chingkai56.findhouse.data.source.SharePrefStorage
 import com.chingkai56.findhouse.fetchData
@@ -94,6 +91,19 @@ class HouseRepository(
     }
 
     fun getPricePreview(priceIndex: Int): QueryPreview {
-        return ConfigProvider().getPriceTitle(priceIndex,sharePref)
+        return ConfigProvider().getPricePreview(priceIndex,sharePref)
+    }
+
+    fun getTypeOptions(): List<RecyclerItem> {
+        return ConfigProvider().typeData(sharePref)
+    }
+
+    fun putTypeChange(item: HouseType) {
+        sharePref.putHouseType(item)
+        updateOptions()
+    }
+
+    fun getTypePreview(index: Int) :QueryPreview{
+        return ConfigProvider().getTypePreview(index)
     }
 }

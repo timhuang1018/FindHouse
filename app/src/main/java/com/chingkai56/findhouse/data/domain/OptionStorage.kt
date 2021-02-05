@@ -1,8 +1,6 @@
 package com.chingkai56.findhouse.data.domain
 
 import com.chingkai56.findhouse.config.HouseKeyWord
-import com.chingkai56.findhouse.data.SelectQuery
-import com.chingkai56.findhouse.helper.RecyclerItem
 
 
 /*
@@ -29,13 +27,14 @@ data class OptionStorage(
         val priceMin:Int=0,
         val priceMax:Int= Int.MAX_VALUE,
         val options:Set<String>?,
-        val priceIndex: Int
+        val priceIndex: Int,
+        val typeIndex:Int
 ){
     fun asQueryParams():Map<String,String>{
         val params =  mapOf(
                 "type" to "1",
                 "searchtype" to "1",
-                HouseKeyWord.Kind to kind.toString(),
+                HouseKeyWord.Type to kind.toString(),
                 HouseKeyWord.RegionId to regionId.toString(),
                 HouseKeyWord.Area to "$areaMin,$areaMax",
                 HouseKeyWord.Rentprice to "$priceMin,$priceMax",
@@ -53,9 +52,3 @@ data class OptionStorage(
         return params
     }
 }
-data class PriceRangeUI(
-        override val id:Int, val rangeName:String,
-        var min:Int, var max:Int,
-        val isCustom:Boolean =false, override val selectPosition: Int,
-        override var isSelect: Boolean = false
-):RecyclerItem,SelectQuery

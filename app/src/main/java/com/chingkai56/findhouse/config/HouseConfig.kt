@@ -3,7 +3,7 @@ package com.chingkai56.findhouse.config
 import com.chingkai56.findhouse.BuildConfig
 
 object HouseKeyWord {
-    const val Kind = "kind"
+    const val Type = "type"
     const val Shape = "shape"
     const val RegionId = "regionid"
     const val Area = "area"
@@ -16,6 +16,7 @@ object HouseKeyWord {
     const val Option = "option"
 
     const val PriceSelectIndex = "PriceSelectIndex"
+    const val TypeSelectIndex = "TypeSelectIndex"
 
     const val ApplicationName = BuildConfig.APPLICATION_ID
 }

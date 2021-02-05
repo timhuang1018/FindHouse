@@ -1,6 +1,7 @@
 package com.chingkai56.findhouse.viewmodels
 
 import androidx.lifecycle.*
+import com.chingkai56.findhouse.data.domain.HouseType
 import com.chingkai56.findhouse.data.domain.PriceRangeUI
 import com.chingkai56.findhouse.data.repository.HouseRepository
 import com.chingkai56.findhouse.helper.OptionDisplayState
@@ -37,12 +38,19 @@ class HouseListViewModel(private val repository:HouseRepository):ViewModel() {
         repository.getPricePreview(it.priceIndex)
     }
 
+    val typePreview = searchOptions.map {
+        repository.getTypePreview(it.typeIndex)
+    }
+
     //TODO solve put same data repetitively will cause view blinking, since state triger each time
     val listItems :LiveData<List<RecyclerItem>> = state.map {
         Timber.e("state:$it")
         when(it){
             OptionDisplayState.PRICE->{
                 repository.getPriceOptions()
+            }
+            OptionDisplayState.TYPE->{
+                repository.getTypeOptions()
             }
             else->{
                 listOf()
@@ -53,7 +61,6 @@ class HouseListViewModel(private val repository:HouseRepository):ViewModel() {
     init {
         fetch.observeForever(doNothingObserver)
     }
-
 
 //    fun getHouses(): LiveData<List<HouseUI>> {
 //        return
@@ -92,6 +99,16 @@ class HouseListViewModel(private val repository:HouseRepository):ViewModel() {
     override fun onCleared() {
         super.onCleared()
         fetch.removeObserver(doNothingObserver)
+    }
+
+    fun changeType(position: Int) {
+        listItems.value?.takeIf { it.size>position }?.let { list->
+            val item = list[position]
+            if(item is HouseType){
+                repository.putTypeChange(item)
+            }
+        }
+        _state.value = OptionDisplayState.NO_DISPLAY
     }
 }
 

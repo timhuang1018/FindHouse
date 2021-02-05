@@ -18,7 +18,9 @@ import com.chingkai56.findhouse.databinding.ActivityHouseListBinding
 import com.chingkai56.findhouse.di.DependencyProvider
 import com.chingkai56.findhouse.helper.BaseListAdapter
 import com.chingkai56.findhouse.helper.OptionDisplayState
+import com.chingkai56.findhouse.helper.textSelect
 import com.chingkai56.findhouse.recycler.HouseListAdapter
+import com.chingkai56.findhouse.recycler.HouseTypeCell
 import com.chingkai56.findhouse.recycler.PriceCommonCell
 import com.chingkai56.findhouse.recycler.PriceCustomCell
 import com.chingkai56.findhouse.viewmodels.HouseListViewModel
@@ -49,7 +51,7 @@ class HouseListActivity : BaseActivity() {
         binding.verticalList.layoutManager = LinearLayoutManager(this)
         binding.verticalList.adapter = adapter
 
-        optionAdapter = BaseListAdapter(PriceCustomCell,PriceCommonCell,viewModel = viewModel)
+        optionAdapter = BaseListAdapter(HouseTypeCell,PriceCustomCell,PriceCommonCell,viewModel = viewModel)
 
         binding.recyclerOptions.apply {
             adapter = optionAdapter
@@ -95,16 +97,11 @@ class HouseListActivity : BaseActivity() {
 
         viewModel.pricePreview.observe(this,{
             Timber.e("price preview:$it")
-            binding.tvPriceOption.apply {
-                text = it.title
-                val color = if (it.isSelect){
-                    ContextCompat.getColor(context,R.color.colorAccent)
-                        }else{
-                    ContextCompat.getColor(context,R.color.default_text)
-                }
-                setTextColor(color)
-            }
+            binding.tvPriceOption.textSelect(it.title,it.isSelect)
+        })
 
+        viewModel.typePreview.observe(this,{
+            binding.tvTypeOption.textSelect(it.title,it.isSelect)
         })
     }
 

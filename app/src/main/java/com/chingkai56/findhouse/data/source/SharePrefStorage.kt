@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.SharedPreferences
 import androidx.core.content.edit
 import com.chingkai56.findhouse.config.HouseKeyWord
+import com.chingkai56.findhouse.data.domain.HouseType
 import com.chingkai56.findhouse.data.domain.OptionStorage
 import com.chingkai56.findhouse.data.domain.PriceRangeUI
 
@@ -16,7 +17,7 @@ class SharePrefStorage(context:Context) {
     fun getQueryCondition(): OptionStorage {
         return sharePref.run {
             OptionStorage(
-                    kind = getInt(HouseKeyWord.Kind,0),
+                    kind = getInt(HouseKeyWord.Type,0),
                     shape = getStringSet(HouseKeyWord.Shape, null),
                     //TODO for now just assign 1 (台北市 )
                     regionId = getInt(HouseKeyWord.RegionId,1),
@@ -27,7 +28,8 @@ class SharePrefStorage(context:Context) {
                     priceMax = getInt(HouseKeyWord.PriceMax,50000),
                     //these options is for query param in 591
                     options = getStringSet(HouseKeyWord.Option,null),
-                    priceIndex = getInt(HouseKeyWord.PriceSelectIndex,-1)
+                    priceIndex = getInt(HouseKeyWord.PriceSelectIndex,-1),
+                    typeIndex = getInt(HouseKeyWord.Type,-1)
             )
         }
     }
@@ -86,6 +88,21 @@ class SharePrefStorage(context:Context) {
 
     fun getPriceMax(): Int {
         return sharePref.getInt(HouseKeyWord.PriceMax,0)
+    }
+
+    fun getTypeSelectIndex(): Int {
+        return sharePref.getInt(HouseKeyWord.TypeSelectIndex,0)
+    }
+
+    fun putHouseType(item: HouseType) {
+        sharePref.edit {
+            if (item.id==1){
+                remove(HouseKeyWord.TypeSelectIndex)
+            }else{
+                putInt(HouseKeyWord.TypeSelectIndex,item.selectPosition)
+            }
+            putInt(HouseKeyWord.Type,item.type)
+        }
     }
 
 
