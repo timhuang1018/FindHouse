@@ -11,6 +11,7 @@ import com.chingkai56.findhouse.config.HouseKeyWord
 import com.chingkai56.findhouse.data.domain.HouseType
 import com.chingkai56.findhouse.data.domain.OptionStorage
 import com.chingkai56.findhouse.data.domain.PriceRangeUI
+import timber.log.Timber
 
 /**
  * Created by TimHuang on 2020/12/9.
@@ -36,7 +37,7 @@ class SharePrefStorage(context:Context) {
                     //these options is for query param in 591
                     options = getStringSet(HouseKeyWord.Option,null),
                     priceIndex = getInt(HouseKeyWord.PriceSelectIndex,-1),
-                    typeIndex = getInt(HouseKeyWord.Type,-1)
+                    typeIndex = getInt(HouseKeyWord.TypeSelectIndex,-1)
             )
         }
     }
@@ -104,7 +105,7 @@ class SharePrefStorage(context:Context) {
     }
 
     fun getTypeSelectIndex(): Int {
-        return sharePref.getInt(HouseKeyWord.TypeSelectIndex,0)
+        return sharePref.getInt(HouseKeyWord.TypeSelectIndex,-1)
     }
 
     fun putHouseType(item: HouseType) {
