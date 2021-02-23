@@ -60,7 +60,6 @@ class PriceViewHolder(itemView: View,val viewModel: ViewModel?):RecyclerView.Vie
     }
 
     fun bind(item: PriceRangeUI){
-        Timber.i("bind item:$item")
         itemView.tv_title.apply {
             text = item.rangeName
             val color = if (item.isSelect){

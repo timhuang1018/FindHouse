@@ -2,11 +2,15 @@ package com.chingkai56.findhouse.viewmodels
 
 import androidx.lifecycle.*
 import com.chingkai56.findhouse.data.domain.HouseType
+import com.chingkai56.findhouse.data.domain.OptionStorage
 import com.chingkai56.findhouse.data.domain.PriceRangeUI
 import com.chingkai56.findhouse.data.repository.HouseRepository
+import com.chingkai56.findhouse.helper.EventWrapper
 import com.chingkai56.findhouse.helper.OptionDisplayState
 import com.chingkai56.findhouse.helper.RecyclerItem
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 import timber.log.Timber
 
 /**
@@ -15,14 +19,21 @@ import timber.log.Timber
 
 class HouseListViewModel(private val repository:HouseRepository):ViewModel() {
 
-
+//    val mutext = Mutex()
     val isRefreshing = MutableLiveData<Boolean>()
 
     private val _state = MutableLiveData<OptionDisplayState>(OptionDisplayState.NO_DISPLAY)
     val state :LiveData<OptionDisplayState>
     get() = _state
 
-    private val searchOptions = repository.searchOptions
+    private val _notifiyNew = MutableLiveData<EventWrapper<Boolean>>()
+    val notifyNew :LiveData<EventWrapper<Boolean>>
+    get() = _notifiyNew
+
+
+    private val _searchOptions = MutableLiveData<OptionStorage>()
+    val searchOptions :LiveData<OptionStorage>
+        get() = _searchOptions
 
     //TODO remove below two variable , bad practice to observe in viewModel
     private val fetch = searchOptions.map {
@@ -60,6 +71,7 @@ class HouseListViewModel(private val repository:HouseRepository):ViewModel() {
 
     init {
         fetch.observeForever(doNothingObserver)
+        updateOptions()
     }
 
 //    fun getHouses(): LiveData<List<HouseUI>> {
@@ -72,8 +84,11 @@ class HouseListViewModel(private val repository:HouseRepository):ViewModel() {
 
     fun refresh() {
         viewModelScope.launch {
-            repository.fetch()
-            isRefreshing.value = false
+//            mutext.withLock {
+                val shouldNotify = repository.fetch()
+                _notifiyNew.value = EventWrapper(shouldNotify)
+                isRefreshing.value = false
+//            }
         }
     }
 
@@ -91,6 +106,7 @@ class HouseListViewModel(private val repository:HouseRepository):ViewModel() {
             val item = list[itemIdex]
             if(item is PriceRangeUI){
                 repository.putPriceChange(item)
+                updateOptions()
             }
         }
         _state.value = OptionDisplayState.NO_DISPLAY
@@ -106,9 +122,15 @@ class HouseListViewModel(private val repository:HouseRepository):ViewModel() {
             val item = list[position]
             if(item is HouseType){
                 repository.putTypeChange(item)
+                updateOptions()
             }
         }
         _state.value = OptionDisplayState.NO_DISPLAY
+    }
+
+
+    private fun updateOptions() {
+        _searchOptions.value = repository.getOptionStorage()
     }
 }
 

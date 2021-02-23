@@ -1,5 +1,6 @@
 package com.chingkai56.findhouse.data.repository
 
+import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.chingkai56.findhouse.config.BaseApplication
@@ -7,9 +8,13 @@ import com.chingkai56.findhouse.config.ConfigProvider
 import com.chingkai56.findhouse.data.domain.*
 import com.chingkai56.findhouse.data.source.LocalDataSource
 import com.chingkai56.findhouse.data.source.SharePrefStorage
+import com.chingkai56.findhouse.di.DependencyProvider
 import com.chingkai56.findhouse.fetchData
 import com.chingkai56.findhouse.helper.RecyclerItem
+import com.chingkai56.findhouse.helper.SingletonHolder
 import com.chingkai56.findhouse.recycler.HouseConfig
+import com.chingkai56.findhouse.work.FetchHousesWork
+import io.reactivex.subjects.PublishSubject
 import timber.log.Timber
 
 /**
@@ -19,17 +24,27 @@ import timber.log.Timber
  * any modification of option should be operated by [HouseRepository]
  **/
 
-class HouseRepository(
+class HouseRepository private constructor(
 //        private val remoteDataSource:RemoteDataSource,
+        context: Context,
         private val sharePref: SharePrefStorage,
         private val localDataSource :LocalDataSource= LocalDataSource(BaseApplication.getDb())) {
 
-    private val _searchOptions = MutableLiveData<OptionStorage>()
-    val searchOptions :LiveData<OptionStorage>
-    get() = _searchOptions
+    private var methodId = 0
 
     init {
-        updateOptions()
+
+        startWork(context)
+
+
+    }
+
+    private fun startWork(context: Context) {
+        //user not setting to fetch data at background yet
+        if (!sharePref.getStartWork()){
+            return
+        }
+        FetchHousesWork.startWork(context)
     }
 
     /**
@@ -37,12 +52,15 @@ class HouseRepository(
      */
     suspend fun fetch(): Boolean {
         var shouldNotify = false
-        val options = _searchOptions.value ?: return false
-        Timber.d("fetch called")
+        val options = sharePref.getQueryCondition()
+        methodId++
+        val id = methodId
+        Timber.e("fetch remote data by option:$options")
         try {
             var firstRow = 0
             //TODO if options change while fetching, restart fetching
-            while (firstRow%30==0){
+            while (firstRow%30==0 && id==methodId){
+                Timber.d("fetch called row:$firstRow")
                 val result = fetchData(options.asQueryParams(),firstRow).data.data
                 val hasNew = localDataSource.insertItems(result)
                 if (hasNew){
@@ -56,6 +74,8 @@ class HouseRepository(
         }catch (e:Exception){
             Timber.e(e)
         }
+        //if user not setting notify new, don't send
+        if (!sharePref.getNotifyNew()) shouldNotify = false
         return shouldNotify
     }
 
@@ -83,12 +103,8 @@ class HouseRepository(
         Timber.e("putPriceChange called")
         sharePref.putPriceRange(item)
         //refresh option config
-        updateOptions()
     }
 
-    private fun updateOptions() {
-        _searchOptions.value = sharePref.getQueryCondition()
-    }
 
     fun getPricePreview(priceIndex: Int): QueryPreview {
         return ConfigProvider().getPricePreview(priceIndex,sharePref)
@@ -100,10 +116,18 @@ class HouseRepository(
 
     fun putTypeChange(item: HouseType) {
         sharePref.putHouseType(item)
-        updateOptions()
     }
 
     fun getTypePreview(index: Int) :QueryPreview{
         return ConfigProvider().getTypePreview(index)
     }
+
+    fun getOptionStorage(): OptionStorage {
+        return sharePref.getQueryCondition()
+    }
+
+    /**
+     * Add this to become a lazy singleton thanks to [SingletonHolder]
+     */
+    companion object: SingletonHolder<HouseRepository,Context>({ context -> HouseRepository(context = context,sharePref = SharePrefStorage(context)) })
 }

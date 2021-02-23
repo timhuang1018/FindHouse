@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+<SwitchPreferenceCompat
+    app:defaultValue=""
+    app:key="@string/key_fetch_data"
+    app:title="@string/text_fetch_data"/>
+
+<SwitchPreferenceCompat
+    app:key="@string/key_notify_new"
+    app:title="@string/text_notify_new"/>
+
+<SwitchPreferenceCompat
+    app:key="@string/key_filter_duplicate"
+    app:title="@string/text_filter_duplicate"/>
+
+</PreferenceScreen>

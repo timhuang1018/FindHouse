@@ -31,18 +31,7 @@ class BaseApplication:Application() {
         Timber.plant(Timber.DebugTree())
 
         createChannel()
-        val constraints = Constraints.Builder()
-                .setRequiresBatteryNotLow(true)
-                .build()
 
-//        val request : PeriodicWorkRequest = PeriodicWorkRequestBuilder<FetchHousesWork>(
-//                30,java.util.concurrent.TimeUnit.MINUTES,
-//                30,java.util.concurrent.TimeUnit.MINUTES)
-//                .setConstraints(constraints)
-//                .build()
-//        WorkManager
-//                .getInstance(this)
-//                .enqueueUniquePeriodicWork(CONTINUE_FETCH,ExistingPeriodicWorkPolicy.REPLACE,request)
     }
 
     fun db(): Database {

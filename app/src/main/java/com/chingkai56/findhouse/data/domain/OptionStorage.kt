@@ -32,9 +32,9 @@ data class OptionStorage(
 ){
     fun asQueryParams():Map<String,String>{
         val params =  mapOf(
-                "type" to "1",
+//                "type" to "1",
                 "searchtype" to "1",
-                HouseKeyWord.Type to kind.toString(),
+                HouseKeyWord.Kind to kind.toString(),
                 HouseKeyWord.RegionId to regionId.toString(),
                 HouseKeyWord.Area to "$areaMin,$areaMax",
                 HouseKeyWord.Rentprice to "$priceMin,$priceMax",

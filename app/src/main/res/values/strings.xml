@@ -8,4 +8,10 @@
     <string name="text_confirm">確定</string>
     <string name="text_max_price">最高價</string>
     <string name="text_min_price">最低價</string>
+    <string name="key_fetch_data">fetch_data</string>
+    <string name="key_notify_new">notify_new</string>
+    <string name="key_filter_duplicate">filter_duplicate</string>
+    <string name="text_fetch_data">自動獲取資料</string>
+    <string name="text_notify_new">有新房子通知我</string>
+    <string name="text_filter_duplicate">過濾重複物件</string>
 </resources>

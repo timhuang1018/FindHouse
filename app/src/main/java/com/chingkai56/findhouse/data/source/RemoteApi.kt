@@ -71,7 +71,7 @@ suspend fun getHouses(token:String?=null): List<RentHouse> {
     }
 }
 
-suspend fun fetchData(params:Map<String,String>,firstRow:Int=0) = withContext(Dispatchers.IO){
+suspend fun fetchData(params:Map<String,String>,firstRow:Int) = withContext(Dispatchers.IO){
     val doc2 = Jsoup.connect(ROOT_URL).run {
         this.header("user-agent","Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/81.0.4044.129 Safari/537.36")
         execute()
@@ -102,7 +102,7 @@ suspend fun fetchData(params:Map<String,String>,firstRow:Int=0) = withContext(Di
 //                        data("option","cold")
 //                        data("hasimg","1")
 //                        data("not_cover", "1")
-//                        data("firstRow", firstRow.toString())
+                        data("firstRow", firstRow.toString())
                         execute()
                     }
             val serial = Json{

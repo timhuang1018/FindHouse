@@ -4,6 +4,9 @@ import android.app.Activity
 import android.content.Context
 import android.content.SharedPreferences
 import androidx.core.content.edit
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.liveData
+import com.chingkai56.findhouse.R
 import com.chingkai56.findhouse.config.HouseKeyWord
 import com.chingkai56.findhouse.data.domain.HouseType
 import com.chingkai56.findhouse.data.domain.OptionStorage
@@ -13,6 +16,10 @@ import com.chingkai56.findhouse.data.domain.PriceRangeUI
  * Created by TimHuang on 2020/12/9.
  */
 class SharePrefStorage(context:Context) {
+
+    private val NotifyNewKey = context.getString(R.string.key_notify_new)
+    private val StartWorkKey = context.getString(R.string.key_fetch_data)
+
     private val sharePref:SharedPreferences = context.getSharedPreferences(HouseKeyWord.ApplicationName,Activity.MODE_PRIVATE)
     fun getQueryCondition(): OptionStorage {
         return sharePref.run {
@@ -31,6 +38,12 @@ class SharePrefStorage(context:Context) {
                     priceIndex = getInt(HouseKeyWord.PriceSelectIndex,-1),
                     typeIndex = getInt(HouseKeyWord.Type,-1)
             )
+        }
+    }
+
+    fun getQueryLiveData(): LiveData<OptionStorage> {
+        return liveData<OptionStorage> {
+            emit(getQueryCondition())
         }
     }
 
@@ -103,6 +116,14 @@ class SharePrefStorage(context:Context) {
             }
             putInt(HouseKeyWord.Type,item.type)
         }
+    }
+
+    fun getNotifyNew(): Boolean {
+        return sharePref.getBoolean(NotifyNewKey,false)
+    }
+
+    fun getStartWork(): Boolean {
+        return sharePref.getBoolean(StartWorkKey,false)
     }
 
 

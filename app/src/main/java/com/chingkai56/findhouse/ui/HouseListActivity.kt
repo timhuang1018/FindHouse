@@ -1,5 +1,6 @@
 package com.chingkai56.findhouse.ui
 
+import android.app.NotificationManager
 import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
@@ -18,6 +19,7 @@ import com.chingkai56.findhouse.databinding.ActivityHouseListBinding
 import com.chingkai56.findhouse.di.DependencyProvider
 import com.chingkai56.findhouse.helper.BaseListAdapter
 import com.chingkai56.findhouse.helper.OptionDisplayState
+import com.chingkai56.findhouse.helper.notifyNew
 import com.chingkai56.findhouse.helper.textSelect
 import com.chingkai56.findhouse.recycler.HouseListAdapter
 import com.chingkai56.findhouse.recycler.HouseTypeCell
@@ -61,7 +63,6 @@ class HouseListActivity : BaseActivity() {
 
     private fun dataBinding() {
         viewModel.listItems.observe(this,{
-            Timber.e("list :$it")
             optionAdapter.submitList(it)
         })
 
@@ -103,6 +104,19 @@ class HouseListActivity : BaseActivity() {
         viewModel.typePreview.observe(this,{
             binding.tvTypeOption.textSelect(it.title,it.isSelect)
         })
+
+        viewModel.notifyNew.observe(this,{
+            it.getContentIfNotHandled()?.let { notifyNew->
+                if (notifyNew){
+                    sendNotification()
+                }
+            }
+        })
+    }
+
+    private fun sendNotification() {
+        val notificationManager = ContextCompat.getSystemService(applicationContext, NotificationManager::class.java) as NotificationManager
+        notificationManager.notifyNew(applicationContext)
     }
 
     private fun setListener() {

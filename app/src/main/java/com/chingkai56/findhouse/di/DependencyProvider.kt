@@ -9,15 +9,10 @@ import com.chingkai56.findhouse.viewmodels.SettingViewModelFactory
 object DependencyProvider {
 
     fun provideHouseListViewModelFactory(context: Context): HouseListViewModelFactory {
-        return HouseListViewModelFactory(provideHouseRepository(context))
+        return HouseListViewModelFactory(HouseRepository.getInstance(context))
     }
 
     fun provideSettingViewModelFactory(context: Context):SettingViewModelFactory{
-        return SettingViewModelFactory(provideHouseRepository(context))
-    }
-
-
-    fun provideHouseRepository(context: Context): HouseRepository {
-        return HouseRepository(sharePref = SharePrefStorage(context))
+        return SettingViewModelFactory(HouseRepository.getInstance(context))
     }
 }

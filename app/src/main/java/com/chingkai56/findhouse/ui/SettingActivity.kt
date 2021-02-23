@@ -3,6 +3,7 @@ package com.chingkai56.findhouse.ui
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.viewModels
+import androidx.fragment.app.commit
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.chingkai56.findhouse.recycler.HouseListAdapter
@@ -26,23 +27,37 @@ class SettingActivity : BaseActivity(),ConfigClickListener {
         super.onCreate(savedInstanceState)
         binding = ActivitySettingBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        supportActionBar?.setDisplayShowTitleEnabled(false)
 
-        binding.verticalList.layoutManager = LinearLayoutManager(this)
-        binding.verticalList.adapter = adapter
+        setupUI(savedInstanceState)
 
         viewModel.getSealedHouses().observe(this, Observer {
             adapter.submitList(it)
         })
 
-        viewModel.getAllConfigs().observe(this, Observer {
-            configAdapter.submitList(it)
-        })
 
-        binding.switchList.apply {
-            adapter = configAdapter
-            layoutManager = LinearLayoutManager(this@SettingActivity)
-        }
+
+//        viewModel.getAllConfigs().observe(this, Observer {
+//            configAdapter.submitList(it)
+//        })
+//
+//        binding.switchList.apply {
+//            adapter = configAdapter
+//            layoutManager = LinearLayoutManager(this@SettingActivity)
+//        }
+    }
+
+    private fun setupUI(savedInstanceState: Bundle?) {
+        supportActionBar?.setDisplayShowTitleEnabled(false)
+
+//        if (savedInstanceState==null){
+//            supportFragmentManager.commit {
+//                add()
+//            }
+//        }
+
+        binding.verticalList.layoutManager = LinearLayoutManager(this)
+        binding.verticalList.adapter = adapter
+
     }
 
     override fun sealOrNot(id: Int) {
