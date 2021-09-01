@@ -1,26 +1,13 @@
 package com.chingkai56.findhouse.data.domain
 
 import com.chingkai56.findhouse.config.HouseKeyWord
+import timber.log.Timber
 
-
-/*
-      data("is_new_list","1")
-                        "type","1")
-                        "kind","1")
-                        "shape","2")
-                        "searchtype","1")
-                        "regionid","1")
-                        "area","13,40")
-                        "patternMore","1,2")
-                        "rentprice","14000,27000")
-                        "option","cold")
-                        "hasimg","1")
-                        "not_cover", "1")
- */
 data class OptionStorage(
         val kind:Int,
         val shape:Set<String>?,
         val regionId:Int,
+        val sectionId:Set<String>?,
         val areaMin:Int=0,
         val areaMax:Int= Int.MAX_VALUE,
         val patternMore:Set<String>?,
@@ -31,7 +18,8 @@ data class OptionStorage(
         val typeIndex:Int
 ){
     fun asQueryParams():Map<String,String>{
-        val params =  mapOf(
+        Timber.e("data:$this")
+        val params =  hashMapOf(
 //                "type" to "1",
                 "searchtype" to "1",
                 HouseKeyWord.Kind to kind.toString(),
@@ -40,15 +28,19 @@ data class OptionStorage(
                 HouseKeyWord.Rentprice to "$priceMin,$priceMax",
                 "hasimg" to "1",
                 "not_cover" to "1")
+        if (sectionId!=null){
+            params[HouseKeyWord.SectionId] = sectionId.joinToString(separator = ",")
+        }
         if (shape!=null){
-            HouseKeyWord.Shape to shape.joinToString(separator = ",")
+            params[HouseKeyWord.Shape] = shape.joinToString(separator = ",")
         }
         if (patternMore!=null){
-            HouseKeyWord.PatternMore to patternMore.joinToString(separator = ",")
+            params[HouseKeyWord.PatternMore] = patternMore.joinToString(separator = ",")
         }
         if (options!=null){
-            HouseKeyWord.Option to options.joinToString(separator = ",")
+            params[HouseKeyWord.Option] = options.joinToString(separator = ",")
         }
+        Timber.e("params:$params")
         return params
     }
 }

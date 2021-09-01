@@ -78,7 +78,12 @@ class LocalDataSource(db:Database) {
 
     fun priceLong(price:String):Long{
         return try {
-            price.replace(",","").toLong()
+            val price = price.replace(",","")
+            if (price.contains("~")){
+                price.substring(price.indexOf("~")+1).toLong()
+            }else{
+                price.toLong()
+            }
         }catch (e:NumberFormatException){
             Timber.e(e)
             //negative means fail

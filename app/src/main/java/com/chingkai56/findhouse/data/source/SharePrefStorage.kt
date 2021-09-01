@@ -26,14 +26,15 @@ class SharePrefStorage(context:Context) {
         return sharePref.run {
             OptionStorage(
                     kind = getInt(HouseKeyWord.Type,0),
-                    shape = getStringSet(HouseKeyWord.Shape, null),
+                    shape = getStringSet(HouseKeyWord.Shape, setOf("2")),
                     //TODO for now just assign 1 (台北市 )
                     regionId = getInt(HouseKeyWord.RegionId,1),
-                    areaMin = getInt(HouseKeyWord.AreaMin,0),
-                    areaMax = getInt(HouseKeyWord.AreaMax,Int.MAX_VALUE),
-                    patternMore = getStringSet(HouseKeyWord.PatternMore,null),
-                    priceMin = getInt(HouseKeyWord.PriceMin,0),
-                    priceMax = getInt(HouseKeyWord.PriceMax,50000),
+                sectionId = getStringSet(HouseKeyWord.SectionId, setOf("4","5","7","11")),
+                    areaMin = getInt(HouseKeyWord.AreaMin,16),
+                    areaMax = getInt(HouseKeyWord.AreaMax,33),
+                    patternMore = getStringSet(HouseKeyWord.PatternMore, setOf("2")),
+                    priceMin = getInt(HouseKeyWord.PriceMin,20000),
+                    priceMax = getInt(HouseKeyWord.PriceMax,30000),
                     //these options is for query param in 591
                     options = getStringSet(HouseKeyWord.Option,null),
                     priceIndex = getInt(HouseKeyWord.PriceSelectIndex,-1),
