@@ -7,6 +7,8 @@ import androidx.work.*
 import com.chingkai56.findhouse.config.BaseApplication
 import com.chingkai56.findhouse.data.repository.HouseRepository
 import com.chingkai56.findhouse.helper.notifyNew
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import timber.log.Timber
 import java.util.concurrent.TimeUnit
 
@@ -18,10 +20,14 @@ class FetchHousesWork(context: Context, workerParams: WorkerParameters) : Corout
     private val repository = HouseRepository.getInstance(context)
     override suspend fun doWork(): Result {
         Timber.e("start to work...")
-        val shouldNotify = repository.fetch()
-        if (shouldNotify){
-            sendNotification()
+
+        withContext(Dispatchers.Default){
+            val shouldNotify = repository.fetch()
+            if (shouldNotify){
+                sendNotification()
+            }
         }
+
         return Result.success()
     }
 

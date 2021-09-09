@@ -2,19 +2,16 @@ package com.chingkai56.findhouse.data.repository
 
 import android.content.Context
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import com.chingkai56.findhouse.config.BaseApplication
 import com.chingkai56.findhouse.config.ConfigProvider
 import com.chingkai56.findhouse.data.domain.*
 import com.chingkai56.findhouse.data.source.LocalDataSource
 import com.chingkai56.findhouse.data.source.SharePrefStorage
-import com.chingkai56.findhouse.di.DependencyProvider
 import com.chingkai56.findhouse.fetchData
 import com.chingkai56.findhouse.helper.RecyclerItem
 import com.chingkai56.findhouse.helper.SingletonHolder
 import com.chingkai56.findhouse.recycler.HouseConfig
 import com.chingkai56.findhouse.work.FetchHousesWork
-import io.reactivex.subjects.PublishSubject
 import timber.log.Timber
 
 /**
@@ -84,7 +81,7 @@ class HouseRepository private constructor(
     }
 
     fun getSealedHouses(): LiveData<List<HouseUI>> {
-        return localDataSource.getSealedHouse()
+        return localDataSource.getSealedHouses()
     }
 
     fun sealOrNot(id: Int,toSeal:Boolean) {

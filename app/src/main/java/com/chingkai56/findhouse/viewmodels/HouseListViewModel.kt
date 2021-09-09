@@ -8,9 +8,8 @@ import com.chingkai56.findhouse.data.repository.HouseRepository
 import com.chingkai56.findhouse.helper.EventWrapper
 import com.chingkai56.findhouse.helper.OptionDisplayState
 import com.chingkai56.findhouse.helper.RecyclerItem
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.sync.Mutex
-import kotlinx.coroutines.sync.withLock
 import timber.log.Timber
 
 /**
@@ -83,11 +82,11 @@ class HouseListViewModel(private val repository:HouseRepository):ViewModel() {
     }
 
     fun refresh() {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
 //            mutext.withLock {
                 val shouldNotify = repository.fetch()
-                _notifiyNew.value = EventWrapper(shouldNotify)
-                isRefreshing.value = false
+                _notifiyNew.postValue(EventWrapper(shouldNotify))
+                isRefreshing.postValue( false)
 //            }
         }
     }

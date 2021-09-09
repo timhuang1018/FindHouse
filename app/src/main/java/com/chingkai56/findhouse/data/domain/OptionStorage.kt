@@ -1,7 +1,6 @@
 package com.chingkai56.findhouse.data.domain
 
 import com.chingkai56.findhouse.config.HouseKeyWord
-import timber.log.Timber
 
 data class OptionStorage(
         val kind:Int,
@@ -18,7 +17,6 @@ data class OptionStorage(
         val typeIndex:Int
 ){
     fun asQueryParams():Map<String,String>{
-        Timber.e("data:$this")
         val params =  hashMapOf(
 //                "type" to "1",
                 "searchtype" to "1",
@@ -40,7 +38,6 @@ data class OptionStorage(
         if (options!=null){
             params[HouseKeyWord.Option] = options.joinToString(separator = ",")
         }
-        Timber.e("params:$params")
         return params
     }
 }
