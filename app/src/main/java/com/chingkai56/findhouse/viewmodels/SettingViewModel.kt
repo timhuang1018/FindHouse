@@ -1,9 +1,6 @@
 package com.chingkai56.findhouse.viewmodels
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.liveData
+import androidx.lifecycle.*
 import com.chingkai56.findhouse.data.domain.HouseUI
 import com.chingkai56.findhouse.data.repository.HouseRepository
 import com.chingkai56.findhouse.recycler.HouseConfig
@@ -16,6 +13,9 @@ class SettingViewModel(
         private val repository:HouseRepository
 ) :ViewModel(){
 
+    private val _searchResult = MutableLiveData<List<HouseUI>>(listOf())
+    val searchResult : LiveData<List<HouseUI>>
+    get() = _searchResult
 
     fun getSealedHouses(): LiveData<List<HouseUI>>{
         return repository.getSealedHouses()
@@ -35,6 +35,11 @@ class SettingViewModel(
         return liveData<List<HouseConfig>> {
             emit(repository.getAllConfigs())
         }
+    }
+
+    fun search(keyword: String) {
+        //TODO search and combine all result
+        //address,section,street, area, price
     }
 }
 

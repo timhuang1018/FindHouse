@@ -14,6 +14,7 @@ import kotlinx.coroutines.withContext
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
 import org.jsoup.Jsoup
+import timber.log.Timber
 
 val ROOT_URL = "https://rent.591.com.tw"
 
@@ -44,7 +45,7 @@ suspend fun fetchData(params:Map<String,String>,firstRow:Int) = withContext(Disp
                 isLenient = true
                 ignoreUnknownKeys = true
             }.decodeFromString<SearchJson>(result.body())
-//            Log.e("serial","serial size:${serial.data.data.size}")
+            Timber.e("serial size:${serial.data.data.size}")
             return@withContext serial
         }
     }

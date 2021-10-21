@@ -30,7 +30,7 @@ class SharePrefStorage(context:Context) {
                     //TODO for now just assign 1 (台北市 )
                     regionId = getInt(HouseKeyWord.RegionId,1),
                 sectionId = getStringSet(HouseKeyWord.SectionId, setOf("4","5","7","10","11")),
-                    areaMin = getInt(HouseKeyWord.AreaMin,15),
+                    areaMin = getInt(HouseKeyWord.AreaMin,12),
                     areaMax = getInt(HouseKeyWord.AreaMax,33),
                     patternMore = getStringSet(HouseKeyWord.PatternMore, setOf("1","2")),
                     priceMin = getInt(HouseKeyWord.PriceMin,16000),
