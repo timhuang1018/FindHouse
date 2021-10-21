@@ -62,13 +62,9 @@ UPDATE house SET isSealed = :isSealed,sealDate = :sealDate WHERE houseId=:houseI
 
 getHousesByOptions:
 SELECT * FROM house
-WHERE isSealed IS NOT 1 AND regionId =:regionId AND price >= :priceMin AND price <= :priceMax
-ORDER BY createDate DESC;
-
-getHouses:
-SELECT * FROM house
-WHERE isSealed IS NOT 1
+WHERE isSealed IS NOT 1 AND regionId =:regionId AND price >= :priceMin AND price <= :priceMax AND date(createDate,'unixepoch','localtime') >= date('now','localtime','-21 day')
 ORDER BY createDate DESC;
 
 getSealed:
-SELECT * FROM house WHERE isSealed IS 1 ORDER BY sealDate IS NULL DESC;
+SELECT * FROM house WHERE isSealed IS 1 AND date(createDate,'unixepoch','localtime') >= date('now','localtime','-21 day')
+ORDER BY sealDate IS NULL DESC;
